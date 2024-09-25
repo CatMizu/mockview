@@ -3,8 +3,6 @@
 import { useEffect, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/AuthProvider'
-import { useAppSelector } from '@/lib/hooks'
-import auth from '@/lib/auth'
 
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -30,8 +28,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               
               <main className="flex-1 overflow-y-auto  " ref={mainContentRef}>
                   {children}
-                  <div className="h-16"></div>
               </main>
+
+              
               </div>
           </div>
       </>

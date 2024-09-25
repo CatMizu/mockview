@@ -77,8 +77,7 @@ function LeftSidebar(props: LeftSidebarProps) {
 
                 <li className="mb-2 font-semibold text-xl">
                     <Link href="/welcome">
-                        <img className="mask mask-squircle w-10" src="/logo192.png" alt="DashWind Logo" />
-                        DashWind
+                        MockView
                     </Link>
                 </li>
                 <div className="overflow-y-scroll pb-20 no-scrollbar" style={{ height: "85vh" }}>
