@@ -9,9 +9,7 @@ export const AudioInputTile = ({
   trackRef: TrackReferenceOrPlaceholder;
 }) => {
   return (
-    <div
-      className={`flex flex-row gap-2 h-[100px] items-center w-full justify-center border rounded-sm border-gray-800 bg-gray-900`}
-    >
+    <div>
       <BarVisualizer
         trackRef={trackRef}
         className="h-full w-full"

@@ -24,12 +24,6 @@ const routes: SidebarMenuObj[] = [
         pageTitle: 'Dashboard',
     },
     {
-        path: '/leads',
-        icon: <InboxArrowDownIcon className={iconClasses} />,
-        pageName: 'Leads',
-        pageTitle : "Leads"
-    },
-    {
         path: '/settings',
         icon: <Cog6ToothIcon className={`${iconClasses} inline`} />,
         pageName: 'Settings',

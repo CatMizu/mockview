@@ -95,79 +95,68 @@ export default function Playground({
 
   useDataChannel(onDataReceived);
 
-  const videoTileContent = useMemo(() => {
-    const videoFitClassName = `object-${config.video_fit || "cover"}`;
 
-    const disconnectedContent = (
-      <div>
-        No video track. Connect to get started.
-      </div>
-    );
 
-    const loadingContent = (
-      <div>
-        <LoadingSVG />
-        Waiting for video track
-      </div>
-    );
 
-    const videoContent = (
-      <VideoTrack
-        trackRef={agentVideoTrack}
+
+
+
+
+
+
+
+const audioTileContent = useMemo(() => {
+
+  const disconnectedContent = (
+    <div className="flex flex-col items-center justify-center gap-2 text-gray-700 text-center w-full">
+      No audio track. Connect to get started.
+    </div>
+  );
+
+  const waitingContent = (
+    <div className="flex flex-col items-center gap-2 text-gray-700 text-center w-full">
+      <LoadingSVG />
+      Waiting for audio track
+    </div>
+  );
+
+  const visualizerContent = (
+    <div
+      className={`flex items-center justify-center w-full h-48 [--lk-va-bar-width:30px] [--lk-va-bar-gap:20px] [--lk-fg:var(--lk-theme-color)]`}
+    >
+      {localMicTrack && (
+        <AudioInputTile trackRef={localMicTrack} />
+      )}
+
+      <BarVisualizer
+        state={voiceAssistant.state}
+        trackRef={voiceAssistant.audioTrack}
+        barCount={5}
+        options={{ minHeight: 20 }}
       />
-    );
+    </div>
+  );
+  if (roomState === ConnectionState.Disconnected) {
+    return disconnectedContent;
+  }
 
-    let content = null;
-    if (roomState === ConnectionState.Disconnected) {
-      content = disconnectedContent;
-    } else if (agentVideoTrack) {
-      content = videoContent;
-    } else {
-      content = loadingContent;
-    }
+  if (!voiceAssistant.audioTrack) {
+    return waitingContent;
+  }
+  return visualizerContent;
+}, [localMicTrack, voiceAssistant.state, voiceAssistant.audioTrack, roomState]);
 
-    return (
-      <div>
-        {content}
-      </div>
-    );
-  }, [agentVideoTrack, config, roomState]);
 
-  const audioTileContent = useMemo(() => {
-    const disconnectedContent = (
-      <div>
-        No audio track. Connect to get started.
-      </div>
-    );
 
-    const waitingContent = (
-      <div>
-        <LoadingSVG />
-        Waiting for audio track
-      </div>
-    );
 
-    const visualizerContent = (
-      <div>
-        <BarVisualizer
-          state={voiceAssistant.state}
-          trackRef={voiceAssistant.audioTrack}
-          barCount={5}
-          options={{ minHeight: 20 }}
-        />
-      </div>
-    );
 
-    if (roomState === ConnectionState.Disconnected) {
-      return disconnectedContent;
-    }
 
-    if (!voiceAssistant.audioTrack) {
-      return waitingContent;
-    }
 
-    return visualizerContent;
-  }, [voiceAssistant.audioTrack, roomState, voiceAssistant.state]);
+
+
+
+
+
 
   const chatTileContent = useMemo(() => {
     if (voiceAssistant.audioTrack) {
@@ -183,95 +172,63 @@ export default function Playground({
 
   const settingsTileContent = useMemo(() => {
     return (
-      <div>
-
-
-
-
-        <ConfigurationPanelItem
-          title="Camera"
-          deviceSelectorKind="videoinput"
-        >
+      <>
+        {localVideoTrack && (
+          <div className="absolute inset-0 w-full h-full">
+            <VideoTrack trackRef={localVideoTrack} className="object-cover w-full h-full rounded-lg" />
+          </div>
+        )}
+  
+        <div className="absolute bottom-4 left-0 w-full h-auto z-10 flex justify-center items-center space-x-8 p-4">
           {localVideoTrack && (
-            <div>
-              <VideoTrack
-                trackRef={localVideoTrack}
-              />
-            </div>
-          
+            <ConfigurationPanelItem deviceSelectorKind="videoinput" />
           )}
-        </ConfigurationPanelItem>
-
-
-
-
-
-
-        <ConfigurationPanelItem
-          title="Microphone"
-          deviceSelectorKind="audioinput"
-        >
-          {localMicTrack && (
-            <AudioInputTile trackRef={localMicTrack} />
+  
+          <Button
+            disabled={roomState === ConnectionState.Connecting}
+            onClick={() => {
+              onConnect(roomState === ConnectionState.Disconnected);
+            }}
+            className="bg-white bg-opacity-75 p-2 rounded-lg shadow-lg"
+            connectionState={roomState}
+          >
+          </Button>
+  
+          {localVideoTrack && (
+            <ConfigurationPanelItem deviceSelectorKind="audioinput" />
           )}
-        </ConfigurationPanelItem>
-
-
-
-
-      </div>
+        </div>
+      </>
     );
-  }, [localVideoTrack, localMicTrack]);
-
+  }, [roomState, localVideoTrack, onConnect]);
+  
 
   return (
     <>
-      <Button
-        disabled={roomState === ConnectionState.Connecting}
-        onClick={() => {
-          onConnect(roomState === ConnectionState.Disconnected);
-        }}
-      >
-        {roomState === ConnectionState.Connecting ? (
-          <LoadingSVG />
-        ) : roomState === ConnectionState.Connected ? (
-          "Disconnect"
-        ) : (
-          "Connect"
-        )}
-      </Button>
+      <div className="flex h-full w-full space-x-9 p-4"> 
+
+
+
+        <div className="flex flex-col w-3/5 h-full space-y-9"> 
+          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg" backgroundColor = "#000000">
+            {settingsTileContent}
+          </PlaygroundTile>
+
+          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg">
+            {config.settings.outputs.audio && audioTileContent}
+          </PlaygroundTile>
+        </div>
 
 
 
 
-      <div className="flex flex-col w-3/5">    
-        <PlaygroundTile
-            title="Video"
-        >
-          {settingsTileContent}
-        </PlaygroundTile>     
-
-
-
-
-        <PlaygroundTile
-          title="Audio"
-        >
-          {config.settings.outputs.audio && audioTileContent}
-        </PlaygroundTile>
-
+        <div className="flex flex-col w-2/5 h-full"> 
+          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg">
+            {config.settings.chat && chatTileContent}
+          </PlaygroundTile>
+        </div>
+        
       </div>
-
-
-      <div className="flex flex-col w-2/5">
-        <PlaygroundTile
-          title="Chat"
-        >
-          {config.settings.chat && chatTileContent}
-        </PlaygroundTile>
-      </div>
-
-
 
     </>
   );

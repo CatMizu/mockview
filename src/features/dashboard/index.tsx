@@ -43,8 +43,9 @@ import {
           serverUrl={wsUrl}
           token={token}
           connect={shouldConnect}
-
+          className="flex flex-col h-full w-full"
         >
+          
           <Playground
             onConnect={(c: boolean) => {
               const m = process.env.NEXT_PUBLIC_LIVEKIT_URL ? "env" : mode;

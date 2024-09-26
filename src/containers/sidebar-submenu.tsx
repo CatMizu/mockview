@@ -23,7 +23,7 @@ function SidebarSubmenu({ submenu, pageName, icon }: SidebarSubmenuProps) {
     /** Open Submenu list if path found in routes, this is for directly loading submenu routes  first time */
     useEffect(() => {
         if (submenu && submenu.some(m => m.path === location.pathname)) setIsExpanded(true);
-    }, [submenu, location.pathname]);
+    }, [submenu]);
 
     return (
         <div className="flex flex-col hover:bg-base-100 bg-base-100">

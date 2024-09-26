@@ -8,7 +8,7 @@ function Page() {
 
   useEffect(() => {
     router.replace(`/login`)
-  }, [])
+  }, [router])
 
   return (
     <div>Loading...</div>
