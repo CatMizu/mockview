@@ -9,7 +9,7 @@ export const getUserInfo = createAsyncThunk<UserProfile, void>(
     async (thunkApi) => {
         // const response = await axios.get<APIResponse>("/workspace/home");
         // return response.data.payload;
-        return {name: "Alex", avatar : "https://reqres.in/img/faces/7-image.jpg", emailId : ""}
+        return {name: "Jianhao", avatar : "https://reqres.in/img/faces/7-image.jpg", emailId : ""}
     }
   );
 

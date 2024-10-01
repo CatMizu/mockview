@@ -8,7 +8,6 @@ import { PlaygroundTile} from "@/components/playground/PlaygroundTile";
 import { useConfig } from "@/hooks/useConfig";
 import { TranscriptionTile } from "@/transcriptions/TranscriptionTile";
 import { Button } from "@/components/button/Button";
-
 import {
   BarVisualizer,
   VideoTrack,
@@ -31,7 +30,6 @@ export interface PlaygroundProps {
   onConnect: (connect: boolean, opts?: { token: string; url: string }) => void;
 }
 
-const headerHeight = 56;
 
 export default function Playground({
   onConnect,
@@ -53,11 +51,6 @@ export default function Playground({
     }
   }, [config, localParticipant, roomState]);
 
-  const agentVideoTrack = tracks.find(
-    (trackRef) =>
-      trackRef.publication.kind === Track.Kind.Video &&
-      trackRef.participant.isAgent
-  );
 
   const localTracks = tracks.filter(
     ({ participant }) => participant instanceof LocalParticipant
@@ -121,13 +114,7 @@ const audioTileContent = useMemo(() => {
   );
 
   const visualizerContent = (
-    <div
-      className={`flex items-center justify-center w-full h-48 [--lk-va-bar-width:30px] [--lk-va-bar-gap:20px] [--lk-fg:var(--lk-theme-color)]`}
-    >
-      {localMicTrack && (
-        <AudioInputTile trackRef={localMicTrack} />
-      )}
-
+    <div className="flex items-center justify-center w-full h-48 bg-gray-200">
       <BarVisualizer
         state={voiceAssistant.state}
         trackRef={voiceAssistant.audioTrack}
@@ -135,7 +122,10 @@ const audioTileContent = useMemo(() => {
         options={{ minHeight: 20 }}
       />
     </div>
+
   );
+
+
   if (roomState === ConnectionState.Disconnected) {
     return disconnectedContent;
   }
@@ -144,7 +134,7 @@ const audioTileContent = useMemo(() => {
     return waitingContent;
   }
   return visualizerContent;
-}, [localMicTrack, voiceAssistant.state, voiceAssistant.audioTrack, roomState]);
+}, [voiceAssistant.state, voiceAssistant.audioTrack, roomState]);
 
 
 
@@ -202,6 +192,10 @@ const audioTileContent = useMemo(() => {
     );
   }, [roomState, localVideoTrack, onConnect]);
   
+
+  console.log(voiceAssistant.audioTrack);
+  console.log(voiceAssistant.state);
+
 
   return (
     <>
