@@ -114,16 +114,18 @@ const audioTileContent = useMemo(() => {
   );
 
   const visualizerContent = (
-    <div className="flex items-center justify-center w-full h-48 bg-gray-200">
+    <div className="flex items-center justify-center w-full h-full bg-transparent">
       <BarVisualizer
         state={voiceAssistant.state}
         trackRef={voiceAssistant.audioTrack}
         barCount={5}
         options={{ minHeight: 20 }}
+        className="custom-bar-visualizer"
       />
     </div>
-
   );
+  
+  
 
 
   if (roomState === ConnectionState.Disconnected) {

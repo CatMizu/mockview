@@ -30,11 +30,11 @@ export const Button: React.FC<ButtonProps> = ({
       className={`flex items-center justify-center text-sm transition ease-out duration-250 ${
         disabled ? "pointer-events-none" : ""
       } active:scale-[0.98] ${className}`}
-      style={buttonStyle} // 使用内联样式设置按钮为圆形
+      style={buttonStyle} 
       {...allProps}
     >
       {connectionState === ConnectionState.Connecting ? (
-        <LoadingSVG /> // 显示加载图标
+        <LoadingSVG /> 
       ) : connectionState === ConnectionState.Connected ? (
         <FiPhoneOff size={24} />
       ) : (
