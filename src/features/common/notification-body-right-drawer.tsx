@@ -19,8 +19,8 @@ function NotificationBodyRightDrawer({ extraObject, closeRightDrawer }: Props) {
                         }
                     >
                         {i % 2 === 0
-                            ? `Your sales has increased by 30% yesterday`
-                            : `Total likes for instagram post - New launch this week,  has crossed 100k `}
+                            ? `Hello `
+                            : `Hi `}
                     </div>
                 );
             })}

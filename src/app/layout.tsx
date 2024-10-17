@@ -1,7 +1,11 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import StoreProvider from './StoreProvider';
-import { AuthProvider } from "@/lib/AuthProvider";
+
+import { AuthProvider } from "@/hooks/useAuth";
+import { ModalProvider } from "@/hooks/useModal";
+import { HeaderProvider } from "@/hooks/useHeader";
+import { RightDrawerProvider } from "@/hooks/useRightDrawer";
+import { UserProvider } from "@/hooks/useUser";
 import initializeApp from "@/lib/init-app";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,11 +20,17 @@ console.log("root layout...")
   return (
     <html lang="en">
       <body className={inter.className}>
-        <StoreProvider>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </StoreProvider>
+        <AuthProvider>
+          <UserProvider>
+            <HeaderProvider>
+              <RightDrawerProvider>
+                <ModalProvider>
+                  {children}
+                </ModalProvider>
+              </RightDrawerProvider>
+            </HeaderProvider>
+          </UserProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-export const APP_NAME: string = 'DashWind';
+export const APP_NAME: string = 'MockView';
 
 export const MODAL_BODY_TYPES: { [key: string]: string } = Object.freeze({
     DEFAULT: "DEFAULT",

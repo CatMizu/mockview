@@ -35,12 +35,6 @@ const routes: SidebarMenuObj[] = [
                 pageName: 'Billing',
                 pageTitle : "Bills",
             },
-            {
-                path: '/settings/team',
-                icon: <UsersIcon className={submenuIconClasses} />,
-                pageName: 'Team',
-                pageTitle : "Team",
-            }
         ],
     },
 ];

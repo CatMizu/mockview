@@ -2,7 +2,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { useAuth } from '@/lib/AuthProvider'
+import { useAuth } from '@/hooks/useAuth'
 
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {

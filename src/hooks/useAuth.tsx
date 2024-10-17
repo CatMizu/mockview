@@ -1,9 +1,9 @@
-// components/AuthProvider.tsx
 'use client'
 
 import React, { createContext, useContext, ReactNode, useState, useEffect, useCallback } from 'react'
-import auth from '@/lib/auth'
 import { useRouter } from 'next/navigation'
+import auth from '@/lib/auth';
+
 
 interface AuthContextType {
   isAuthenticated: boolean

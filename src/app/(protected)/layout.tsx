@@ -2,13 +2,9 @@
 "use client"
 
 import React, { useEffect, useRef } from 'react'
-import type { Metadata } from 'next'
-import axios from 'axios'
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useRouter } from 'next/navigation' 
-import auth from '@/lib/auth'
 import { ToastContainer } from 'react-toastify'
-import { useAuth } from '@/lib/AuthProvider'
+import { useAuth } from '@/hooks/useAuth'
 import Header from '@/containers/header'
 import LeftSidebar from '@/containers/left-sidebar'
 import RightSidebar from '@/containers/right-sidebar'
@@ -24,7 +20,6 @@ export default function ProtectedLayout({ children, params }: LayoutProps) {
   const { isAuthenticated, isLoading } = useAuth()
 
   const router = useRouter()
-  const dispatch = useAppDispatch()
   const mainContentRef = useRef(null);
 
   useEffect(() => {

@@ -6,35 +6,33 @@ import SidebarSubmenu from './sidebar-submenu';
 import routes from '@/helper/sidebar-routes';
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { setPageTitle } from '@/features/common/headerSlice';
-import { UserProfile } from '@/helper/types';
-import BookmarkSquareIcon from '@heroicons/react/24/outline/BookmarkSquareIcon'
+import { useHeader } from "@/hooks/useHeader";
+import { useUser } from "@/hooks/useUser";
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon'
 import ArrowUpOnSquareIcon from '@heroicons/react/24/outline/ArrowUpOnSquareIcon'
-import { getUserInfo } from '@/features/common/userSlice';
 import auth from '@/lib/auth';
+import Image from 'next/image';
 
 interface LeftSidebarProps {}
 
 
 
 function LeftSidebar(props: LeftSidebarProps) {
-    const pathname = usePathname()
-    const dispatch = useAppDispatch()
+    const pathname = usePathname()!
+    const { setPageTitle } = useHeader();
+    const { name, avatar, getUserInfo } = useUser();
 
     const close = () => {
         const leftSidebarDrawer = document.getElementById('left-sidebar-drawer');
         if (leftSidebarDrawer) leftSidebarDrawer.click();
     };
-    const user = useAppSelector((state) => state.user);
 
 
     useEffect(() => {
         console.log(pathname)
         let routeObj = routes.filter((r) => {return r.path == pathname})[0]
         if(routeObj){
-            dispatch(setPageTitle({title : routeObj.pageTitle}))
+            setPageTitle(routeObj.pageTitle);
         }else{
             const secondSlashIndex = pathname.indexOf('/', pathname.indexOf('/') + 1)
             if (secondSlashIndex !== -1) {
@@ -43,17 +41,17 @@ function LeftSidebar(props: LeftSidebarProps) {
                 if(submenuRouteObj.submenu){
                     let submenuObj = submenuRouteObj.submenu.filter((r) => {return r.path == pathname})[0]
                     console.log("herere", submenuObj)
-                    dispatch(setPageTitle({title : submenuObj.pageTitle}))
+                    setPageTitle(submenuObj.pageTitle)
                     
                 }
             }
         }
-    }, [pathname])
+    }, [pathname, setPageTitle])
 
 
     useEffect(() => {
-        dispatch(getUserInfo())
-    }, [])
+        getUserInfo()
+    }, [getUserInfo])
 
     const logoutUser = async () => {
         console.log("here")
@@ -109,12 +107,16 @@ function LeftSidebar(props: LeftSidebarProps) {
             <div tabIndex={0} role="button" className="btn w-full bg-base-100 text-left justify-start ">
                 <div className="avatar">
                 <div className="w-6 rounded-full">
-                    <img src={user.avatar} />
+                    <Image
+                        src={avatar}
+                        alt="User Avatar"
+                        width={100}
+                        height={100}
+                        className="rounded-full"
+                    />
                 </div>
-                </div>{user.name}<ChevronUpIcon className='w-4 ' /></div>
+                </div>{name}<ChevronUpIcon className='w-4 ' /></div>
             <ul tabIndex={0} className="dropdown-content visible w-52 px-4 z-[1]  menu  shadow bg-base-200 rounded-box ">
-                <li className=""><Link href={'/settings/billing'}><BookmarkSquareIcon className='w-4 ' />Bill History</Link></li>
-                <div className="divider py-2 m-0"></div>
                 <li onClick={() => logoutUser()}><a className=' ' ><ArrowUpOnSquareIcon className='w-4 ' />Logout</a></li>
             </ul>
             </div>

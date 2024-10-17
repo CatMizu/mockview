@@ -5,9 +5,8 @@ import BellIcon from '@heroicons/react/24/outline/BellIcon';
 import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import MoonIcon from '@heroicons/react/24/outline/MoonIcon';
 import SunIcon from '@heroicons/react/24/outline/SunIcon';
-import { useAppSelector, useAppDispatch } from '../lib/hooks'
-import { removeNotificationMessage } from '@/features/common/headerSlice';
-import { openRightDrawer } from '@/features/common/rightDrawerSlice';
+import { useHeader } from "@/hooks/useHeader";
+import { useRightDrawer } from "@/hooks/useRightDrawer";
 import { RIGHT_DRAWER_TYPES } from '@/helper/app-constants';
 import { toast } from 'react-toastify';
 
@@ -17,10 +16,10 @@ interface HeaderProps {
 
 function Header({contentRef}: HeaderProps): JSX.Element {
 
-  const { noOfNotifications, pageTitle, newNotificationMessage, newNotificationStatus } = useAppSelector((state) => state.header);
   const [currentTheme, setCurrentTheme] = useState<string | null>(localStorage.getItem("theme"));
+  const { pageTitle, noOfNotifications, newNotificationMessage, newNotificationStatus, removeNotificationMessage, showNotification } = useHeader();
+  const { openRightDrawer } = useRightDrawer();
 
-  const dispatch = useAppDispatch();
   
   useEffect(() => {
     console.log(newNotificationMessage)
@@ -31,9 +30,9 @@ function Header({contentRef}: HeaderProps): JSX.Element {
       }else{
         toast.error(newNotificationMessage)
       }
-      dispatch(removeNotificationMessage());
+      removeNotificationMessage();
     }
-  }, [newNotificationMessage]);
+  }, [newNotificationMessage, newNotificationStatus, removeNotificationMessage]);
 
 //  Scroll back to top on new page load
  useEffect(() => {
@@ -43,7 +42,7 @@ function Header({contentRef}: HeaderProps): JSX.Element {
           behavior: "smooth"
       });
   }
-}, [pageTitle])
+}, [contentRef, pageTitle])
 
   useEffect(() => {
     themeChange(false);
@@ -54,11 +53,11 @@ function Header({contentRef}: HeaderProps): JSX.Element {
         setCurrentTheme("light");
       }
     }
-  }, []);
+  }, [currentTheme]);
 
   // Opening right sidebar for notification
   const openNotification = (): void => {
-    dispatch(openRightDrawer({ header: "Notifications", bodyType: RIGHT_DRAWER_TYPES.NOTIFICATION , extraObject : {}}));
+    openRightDrawer("Notifications", RIGHT_DRAWER_TYPES.NOTIFICATION, {}); 
   };
 
 

@@ -1,7 +1,3 @@
-// lib/auth.ts
-'use client'
-
-import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const auth = {

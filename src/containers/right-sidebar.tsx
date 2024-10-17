@@ -1,16 +1,14 @@
 import { XMarkIcon } from '@heroicons/react/24/solid'
-import { useDispatch, useSelector } from 'react-redux'
+import { useRightDrawer } from '@/hooks/useRightDrawer'
 import { RIGHT_DRAWER_TYPES } from '@/helper/app-constants'
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { closeRightDrawer } from '@/features/common/rightDrawerSlice'
 import NotificationBodyRightDrawer from '@/features/common/notification-body-right-drawer'
 
 function RightSidebar() {
-    const { isOpen, bodyType, extraObject, header } = useAppSelector((state) => state.rightDrawer)
-    const dispatch = useAppDispatch()
+    const { isOpen, bodyType, extraObject, header, closeRightDrawer } = useRightDrawer(); // 使用 useRightDrawer
+
 
     const close = () => {
-        dispatch(closeRightDrawer())
+        closeRightDrawer()
     }
 
     return (

@@ -5,7 +5,8 @@ import InputText from '@/components/input/input-text';
 import ErrorText from '@/components/typography/error-text';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/lib/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
+import { useUser } from '@/hooks/useUser'
 
 interface LoginObj {
   otp: string;
@@ -21,6 +22,7 @@ function Login(): JSX.Element {
   const [showLoginPage, setShowLoginPage] = useState<boolean>(true);
   const [isOtpSent, setIsOtpSent] = useState(false)
   const { login } = useAuth()
+  const { getUserInfo } = useUser();
 
   const [loginObj, setLoginObj] = useState<LoginObj>({
     otp: '',
@@ -40,18 +42,18 @@ function Login(): JSX.Element {
   };
 
   const sendMailOtp = () => {
-      if (loginObj.emailId.trim() === '') {
-        setErrorMessage('Email Id is required! (use any value)');
-        return;
-      }else{
-        setLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-              setIsOtpSent(true)
-              setLoading(false);
-        }, 1000);
-      }
-  }
+    if (loginObj.emailId.trim() === '') {
+      setErrorMessage('Email Id is required! (use any value)');
+      return;
+    }else{
+      setLoading(true);
+      getUserInfo(loginObj.emailId.trim())
+      setTimeout(() => {
+            setIsOtpSent(true)
+            setLoading(false);
+      }, 1000);
+    }
+}
 
   const submitVerificationCode = () => {
       if (loginObj.otp.trim() === '') {
@@ -130,7 +132,7 @@ function Login(): JSX.Element {
               <div className='mt-8'>
                   {errorMessage && <ErrorText styleClass="mt-8">{errorMessage}</ErrorText>}
                   <button type="submit" className={`btn mt-2 w-full btn-primary`}>
-                    {loading && <span className="loading loading-spinner"></span>}{isOtpSent ? "Verify" : "Get Verification Code" }
+                    {loading && <span className="loading loading-spinner"></span>}{isOtpSent ? "Verify" : "Sign In With Brave" }
                   </button>
               </div>
             </form>

@@ -11,9 +11,7 @@ function LandingIntro(){
               <h1 className='text-3xl text-center font-bold '>{APP_NAME}</h1>
 
                 <div className="text-center mt-12"><img src="./intro.png" alt="Dashwind Admin Template" className="w-48 inline-block"></img></div>
-              
-                <p className='mt-8 font-bold text-xs'>Next JS 14 | Daisy UI | Tailwind CSS | Typescript 5</p>
-                
+        
               </div>
 
             </div>
