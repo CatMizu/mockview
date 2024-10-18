@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import axios from "axios";
 
 import {
     LiveKitRoom,
@@ -26,7 +27,7 @@ import {
   }
   
   export function HomeInner() {
-    const { shouldConnect, wsUrl, token, mode, connect, disconnect } =
+    const { shouldConnect, wsUrl, token, roomName, mode, connect, disconnect } =
       useConnection();
   
     const handleConnect = useCallback(
@@ -35,13 +36,82 @@ import {
       },
       [connect, disconnect]
     );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const egressIdRef = React.useRef<string | null>(null);
+
+    const startEgress = useCallback(async () => {
+      try {
+        console.log("thisis -==--------------------------------------------the room name!:", roomName);
+        const response = await axios.post("/api/start-recording", { roomName });
+        egressIdRef.current = response.data.egressId || null;
+        console.log(response.data.message);
+      } catch (error) {
+        console.error("启动 Egress 失败:", error);
+      }
+    }, [roomName]);
   
+    const stopEgress = useCallback(async () => {
+      if (!egressIdRef.current) {
+        console.error("没有可用的 Egress ID 来停止录制。");
+        return;
+      }
+      try {
+        await axios.post("/api/stop-recording", { egressId: egressIdRef.current });
+        console.log("Egress 已成功停止");
+        egressIdRef.current = null;
+      } catch (error) {
+        console.error("停止 Egress 失败:", error);
+      }
+    }, []);
+
+    // 连接成功时启动 Egress
+    const handleConnected = useCallback(async () => {
+      await startEgress();
+    }, [startEgress]);
+
+    const handleDisconnected = useCallback(async () => {
+      await stopEgress();
+    }, [stopEgress]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return (
       <>
         <LiveKitRoom
           serverUrl={wsUrl}
           token={token}
           connect={shouldConnect}
+          onConnected={handleConnected}
+          onDisconnected={handleDisconnected}
           className="flex flex-col h-full w-full"
         >
           

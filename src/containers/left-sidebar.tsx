@@ -113,7 +113,6 @@ function LeftSidebar(props: LeftSidebarProps) {
                 </div>
                 </div>{user.name}<ChevronUpIcon className='w-4 ' /></div>
             <ul tabIndex={0} className="dropdown-content visible w-52 px-4 z-[1]  menu  shadow bg-base-200 rounded-box ">
-                <li className=""><Link href={'/settings/billing'}><BookmarkSquareIcon className='w-4 ' />Bill History</Link></li>
                 <div className="divider py-2 m-0"></div>
                 <li onClick={() => logoutUser()}><a className=' ' ><ArrowUpOnSquareIcon className='w-4 ' />Logout</a></li>
             </ul>
