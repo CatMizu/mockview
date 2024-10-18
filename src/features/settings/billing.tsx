@@ -17,34 +17,7 @@ const Billing: React.FC = () => {
     return (
         <>
             <TitleCard title="Billing History" topMargin="mt-2">
-                <div className="overflow-x-auto w-full">
-                    <table className="table w-full">
-                        <thead>
-                            <tr>
-                                <th>Invoice No</th>
-                                <th>Invoice Generated On</th>
-                                <th>Description</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Invoice Paid On</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                bills.map((bill, index) => (
-                                    <tr key={index}>
-                                        <td>{bill.invoiceNo}</td>
-                                        <td>{bill.generatedOn}</td>
-                                        <td>{bill.description}</td>
-                                        <td>${bill.amount}</td>
-                                        <td>{getPaymentStatus(bill.status)}</td>
-                                        <td>{bill.paidOn}</td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                
             </TitleCard>
         </>
     )
