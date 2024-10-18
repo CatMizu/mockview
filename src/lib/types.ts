@@ -13,5 +13,4 @@ export interface SessionProps {
 export interface TokenResult {
   identity: string;
   accessToken: string;
-  roomName: string;
 }

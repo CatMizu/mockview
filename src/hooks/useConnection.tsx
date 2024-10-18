@@ -11,7 +11,6 @@ type TokenGeneratorData = {
   shouldConnect: boolean;
   wsUrl: string;
   token: string;
-  roomName: string;
   mode: ConnectionMode;
   disconnect: () => Promise<void>;
   connect: (mode: ConnectionMode) => Promise<void>;
@@ -30,31 +29,28 @@ export const ConnectionProvider = ({
   const [connectionDetails, setConnectionDetails] = useState<{
     wsUrl: string;
     token: string;
-    roomName: string;
     mode: ConnectionMode;
     shouldConnect: boolean;
-  }>({ wsUrl: "", token: "", roomName: "", shouldConnect: false, mode: "manual" });
+  }>({ wsUrl: "", token: "", shouldConnect: false, mode: "manual" });
 
   const connect = useCallback(
     async (mode: ConnectionMode) => {
       let token = "";
       let url = "";
-      let roomName = "";
       if (mode === "env") {
         if (!process.env.NEXT_PUBLIC_LIVEKIT_URL) {
           throw new Error("NEXT_PUBLIC_LIVEKIT_URL is not set");
         }
         url = process.env.NEXT_PUBLIC_LIVEKIT_URL;
-        const { accessToken, roomName: fetchedRoomName } = await fetch("/api/token").then((res) =>
+        const { accessToken } = await fetch("/api/token").then((res) =>
           res.json()
         );
         token = accessToken;
-        roomName = fetchedRoomName;
       } else {
         token = config.settings.token;
         url = config.settings.ws_url;
       }
-      setConnectionDetails({ wsUrl: url, token, roomName, shouldConnect: true, mode });
+      setConnectionDetails({ wsUrl: url, token, shouldConnect: true, mode });
     },
     [config.settings.token, config.settings.ws_url]
   );
@@ -68,7 +64,6 @@ export const ConnectionProvider = ({
       value={{
         wsUrl: connectionDetails.wsUrl,
         token: connectionDetails.token,
-        roomName: connectionDetails.roomName,
         shouldConnect: connectionDetails.shouldConnect,
         mode: connectionDetails.mode,
         connect,

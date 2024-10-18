@@ -40,7 +40,6 @@ export default async function handleToken(
     const result: TokenResult = {
       identity,
       accessToken: token,
-      roomName,
     };
 
     res.status(200).json(result);

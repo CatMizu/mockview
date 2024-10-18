@@ -1,5 +1,4 @@
 "use client";
-import '@livekit/components-styles';
 
 import { LoadingSVG } from "@/components/button/LoadingSVG";
 import { ChatMessageType } from "@/components/chat/ChatTile";
@@ -99,47 +98,45 @@ export default function Playground({
 
 
 
-  const audioTileContent = useMemo(() => {
-    const disconnectedContent = (
-      <div className="flex flex-col items-center justify-center gap-2 text-gray-700 text-center w-full">
-        No audio track. Connect to get started.
-      </div>
-    );
-  
-    const waitingContent = (
-      <div className="flex flex-col items-center gap-2 text-gray-700 text-center w-full">
-        <LoadingSVG />
-        Waiting for audio track
-      </div>
-    );
-  
-    if (roomState === ConnectionState.Disconnected) {
-      return disconnectedContent;
-    }
-  
-    if (!voiceAssistant.audioTrack) {
-      return waitingContent;
-    }
-  
-    return (
-      <div
-        className="flex items-center justify-center w-full h-48"
-        style={{ backgroundColor: "inherit" }}
-      >
-        <BarVisualizer
-          state={voiceAssistant.state}
-          trackRef={voiceAssistant.audioTrack}
-          barCount={5}
-          options={{ minHeight: 20 }}
-          className="custom-bar-visualizer"
-          style={{ backgroundColor: "transparent", margin: 0, padding: 0 }}
-        />
-      </div>
-    );
-  }, [roomState, voiceAssistant.audioTrack, voiceAssistant.state]);
+const audioTileContent = useMemo(() => {
+
+  const disconnectedContent = (
+    <div className="flex flex-col items-center justify-center gap-2 text-gray-700 text-center w-full">
+      No audio track. Connect to get started.
+    </div>
+  );
+
+  const waitingContent = (
+    <div className="flex flex-col items-center gap-2 text-gray-700 text-center w-full">
+      <LoadingSVG />
+      Waiting for audio track
+    </div>
+  );
+
+  const visualizerContent = (
+    <div className="flex items-center justify-center w-full h-full bg-transparent">
+      <BarVisualizer
+        state={voiceAssistant.state}
+        trackRef={voiceAssistant.audioTrack}
+        barCount={5}
+        options={{ minHeight: 20 }}
+        className="custom-bar-visualizer"
+      />
+    </div>
+  );
   
   
 
+
+  if (roomState === ConnectionState.Disconnected) {
+    return disconnectedContent;
+  }
+
+  if (!voiceAssistant.audioTrack) {
+    return waitingContent;
+  }
+  return visualizerContent;
+}, [voiceAssistant.state, voiceAssistant.audioTrack, roomState]);
 
 
 
