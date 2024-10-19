@@ -2,7 +2,7 @@
 "use client";
 import React from 'react';
 import axios from "axios";
-
+import { useAppSelector } from '@/lib/hooks'
 import {
     LiveKitRoom,
     RoomAudioRenderer,
@@ -36,10 +36,11 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
   export function HomeInner() {
 
 
-    const { shouldConnect, wsUrl, token, roomName, mode, connect, disconnect } =
-      useConnection();
+    const { shouldConnect, wsUrl, token, roomName, mode, connect, disconnect } = useConnection();
+    const user = useAppSelector((state) => state.user);
+    const { transcripts } = useTranscription();
 
-  
+
     const handleConnect = useCallback(
       async (c: boolean, mode: ConnectionMode) => {
         c ? connect(mode) : disconnect();
@@ -51,13 +52,15 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
 
     const startEgress = useCallback(async () => {
       try {
-        const response = await axios.post("/api/start-recording", { roomName });
+        const userEmail = user.emailId
+        const timestamp = new Date().toISOString();
+        const response = await axios.post("/api/start-recording", { roomName, userEmail, timestamp });
         egressIdRef.current = response.data.egressId || null;
         console.log(response.data.message);
       } catch (error) {
         console.error("Egress failed!:", error);
       }
-    }, [roomName]);
+    }, [roomName, user.emailId]);
   
     const stopEgress = useCallback(async () => {
       if (!egressIdRef.current) {
@@ -73,37 +76,28 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
     }, []);
 
 
+
+
+    // happens when use connected
     const handleConnected = useCallback(async () => {
       await startEgress();
     }, [startEgress]);
 
 
 
-
-
-    // happens when use disconnect
-    const { transcripts } = useTranscription();
-
+    // happens when disconnect
     const handleDisconnected = useCallback(async () => {
-      await stopEgress();
-      
+      await stopEgress();      
       const text = formatTranscriptsForGPT(transcripts);
       
       try {
         const response = await axios.post("/api/analyze-text", { text });
-        const result = await axios.post("/api/send-email", { response });
-        console.log(result.data.message); 
+        console.log(response.data.message); 
+        // upload user results to storage
       } catch (error) {
         console.error('Email sending failed:', error);
       }
     }, [stopEgress, transcripts]);
-
-
-
-
-
-
-
 
 
 

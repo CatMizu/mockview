@@ -1,4 +1,4 @@
-// pages/api/stop-egress.ts
+// pages/api/stop-recordings.ts
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { EgressClient } from 'livekit-server-sdk';
@@ -8,7 +8,6 @@ type Data = {
   error?: string;
 };
 
-// 从环境变量中读取必要的配置
 const LIVEKIT_SERVER_URL = process.env.NEXT_PUBLIC_LIVEKIT_URL!;
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY;
 const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET;

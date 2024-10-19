@@ -1,3 +1,4 @@
+// pages/api/start-recording
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { EgressClient, SegmentedFileOutput, EncodingOptionsPreset } from 'livekit-server-sdk';
 
@@ -35,7 +36,7 @@ export default async function handler(
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { roomName } = req.body;
+  const { roomName, userEmail, timestamp } = req.body;
 
   if (!roomName || typeof roomName !== 'string') {
     return res.status(400).json({ error: 'Invalid or missing roomName' });
@@ -44,9 +45,9 @@ export default async function handler(
   try {
     const outputs = {
       segments: new SegmentedFileOutput({
-        filenamePrefix: 'my-output',
-        playlistName: 'my-output.m3u8',
-        livePlaylistName: 'my-output-live.m3u8',
+        filenamePrefix: `${userEmail}_${timestamp}_output`,
+        playlistName: `${userEmail}_${timestamp}_output.m3u8`,
+        livePlaylistName: `${userEmail}_${timestamp}_output-live.m3u8`,
         segmentDuration: 2,
         output: {
           case: 's3',
