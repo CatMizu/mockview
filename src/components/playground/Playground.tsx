@@ -1,3 +1,4 @@
+// Playground.tsx
 "use client";
 import '@livekit/components-styles';
 
@@ -12,6 +13,7 @@ import { Button } from "@/components/button/Button";
 import {
   BarVisualizer,
   VideoTrack,
+  useChatToggle,
   useConnectionState,
   useDataChannel,
   useLocalParticipant,
@@ -21,6 +23,7 @@ import {
 } from "@livekit/components-react";
 import { ConnectionState, LocalParticipant, Track } from "livekit-client";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+
 
 export interface PlaygroundMeta {
   name: string;
@@ -35,10 +38,9 @@ export interface PlaygroundProps {
 export default function Playground({
   onConnect,
 }: PlaygroundProps) {
-  const { config, setUserSettings } = useConfig();
-  const { name } = useRoomInfo();
-  const [transcripts, setTranscripts] = useState<ChatMessageType[]>([]);
+  const { config } = useConfig();
   const { localParticipant } = useLocalParticipant();
+
 
   const voiceAssistant = useVoiceAssistant();
 
@@ -62,39 +64,6 @@ export default function Playground({
   const localMicTrack = localTracks.find(
     ({ source }) => source === Track.Source.Microphone
   );
-
-  const onDataReceived = useCallback(
-    (msg: any) => {
-      if (msg.topic === "transcription") {
-        const decoded = JSON.parse(
-          new TextDecoder("utf-8").decode(msg.payload)
-        );
-        let timestamp = new Date().getTime();
-        if ("timestamp" in decoded && decoded.timestamp > 0) {
-          timestamp = decoded.timestamp;
-        }
-        setTranscripts([
-          ...transcripts,
-          {
-            name: "You",
-            message: decoded.text,
-            timestamp: timestamp,
-            isSelf: true,
-          },
-        ]);
-      }
-    },
-    [transcripts]
-  );
-
-  useDataChannel(onDataReceived);
-
-
-
-
-
-
-
 
 
 
@@ -197,10 +166,6 @@ export default function Playground({
     );
   }, [roomState, localVideoTrack, onConnect]);
   
-
-  console.log(voiceAssistant.audioTrack);
-  console.log(voiceAssistant.state);
-
 
   return (
     <>

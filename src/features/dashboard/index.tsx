@@ -1,3 +1,4 @@
+//index.tsx
 "use client";
 import React from 'react';
 import axios from "axios";
@@ -7,19 +8,25 @@ import {
     RoomAudioRenderer,
     StartAudio,
   } from "@livekit/components-react";
-  import { useCallback } from "react";
+import { useCallback } from "react";
 
-  import Playground from "@/components/playground/Playground";
-  import { ConfigProvider } from "@/hooks/useConfig";
-  import { ConnectionMode, ConnectionProvider, useConnection } from "@/hooks/useConnection";
-  import { ToastProvider } from "@/components/toast/ToasterProvider";
+import Playground from "@/components/playground/Playground";
+import { ConfigProvider } from "@/hooks/useConfig";
+import { ConnectionMode, ConnectionProvider, useConnection } from "@/hooks/useConnection";
+import { ToastProvider } from "@/components/toast/ToasterProvider";
+import { TranscriptionProvider } from "@/hooks/useTranscription";
+import { useTranscription } from '@/hooks/useTranscription';
+import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
+
   
   export default function Dashboard() {
     return (
       <ToastProvider>
         <ConfigProvider>
           <ConnectionProvider>
-            <HomeInner />
+            <TranscriptionProvider>
+              <HomeInner />
+            </TranscriptionProvider>
           </ConnectionProvider>
         </ConfigProvider>
       </ToastProvider>
@@ -27,8 +34,11 @@ import {
   }
   
   export function HomeInner() {
+
+
     const { shouldConnect, wsUrl, token, roomName, mode, connect, disconnect } =
       useConnection();
+
   
     const handleConnect = useCallback(
       async (c: boolean, mode: ConnectionMode) => {
@@ -37,58 +47,56 @@ import {
       [connect, disconnect]
     );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const egressIdRef = React.useRef<string | null>(null);
 
     const startEgress = useCallback(async () => {
       try {
-        console.log("thisis -==--------------------------------------------the room name!:", roomName);
         const response = await axios.post("/api/start-recording", { roomName });
         egressIdRef.current = response.data.egressId || null;
         console.log(response.data.message);
       } catch (error) {
-        console.error("启动 Egress 失败:", error);
+        console.error("Egress failed!:", error);
       }
     }, [roomName]);
   
     const stopEgress = useCallback(async () => {
       if (!egressIdRef.current) {
-        console.error("没有可用的 Egress ID 来停止录制。");
+        console.error("no Egress is running");
         return;
       }
       try {
         await axios.post("/api/stop-recording", { egressId: egressIdRef.current });
-        console.log("Egress 已成功停止");
         egressIdRef.current = null;
       } catch (error) {
-        console.error("停止 Egress 失败:", error);
+        console.error("Egress failed:", error);
       }
     }, []);
 
-    // 连接成功时启动 Egress
+
     const handleConnected = useCallback(async () => {
       await startEgress();
     }, [startEgress]);
 
+
+
+
+
+    // happens when use disconnect
+    const { transcripts } = useTranscription();
+
     const handleDisconnected = useCallback(async () => {
       await stopEgress();
-    }, [stopEgress]);
+      
+      const text = formatTranscriptsForGPT(transcripts);
+      
+      try {
+        const response = await axios.post("/api/analyze-text", { text });
+        const result = await axios.post("/api/send-email", { response });
+        console.log(result.data.message); 
+      } catch (error) {
+        console.error('Email sending failed:', error);
+      }
+    }, [stopEgress, transcripts]);
 
 
 

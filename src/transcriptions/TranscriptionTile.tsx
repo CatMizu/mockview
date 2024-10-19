@@ -12,6 +12,7 @@ import {
   TranscriptionSegment,
 } from "livekit-client";
 import { useEffect, useState } from "react";
+import { useTranscription } from "@/hooks/useTranscription";  // 引入 useTranscription
 
 export function TranscriptionTile({
   agentAudioTrack,
@@ -20,6 +21,7 @@ export function TranscriptionTile({
   agentAudioTrack: TrackReferenceOrPlaceholder;
   accentColor: string;
 }) {
+  const { addTranscript, transcripts } = useTranscription();  // 使用 useTranscription
   const agentMessages = useTrackTranscription(agentAudioTrack);
   const localParticipant = useLocalParticipant();
   const localMessages = useTrackTranscription({
@@ -28,67 +30,38 @@ export function TranscriptionTile({
     participant: localParticipant.localParticipant,
   });
 
-  const [transcripts, setTranscripts] = useState<Map<string, ChatMessageType>>(
-    new Map()
-  );
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const { chatMessages, send: sendChat } = useChat();
 
   // store transcripts
   useEffect(() => {
-    agentMessages.segments.forEach((s) =>
-      transcripts.set(
-        s.id,
-        segmentToChatMessage(
-          s,
-          transcripts.get(s.id),
-          agentAudioTrack.participant
-        )
-      )
-    );
-    localMessages.segments.forEach((s) =>
-      transcripts.set(
-        s.id,
-        segmentToChatMessage(
-          s,
-          transcripts.get(s.id),
-          localParticipant.localParticipant
-        )
-      )
-    );
+    agentMessages.segments.forEach((s) => {
+      const message = segmentToChatMessage(
+        s,
+        transcripts.get(s.id),  // 使用 get 从 Map 中获取
+        agentAudioTrack.participant
+      );
+      addTranscript(s.id, message);  // 添加到 context 中
+    });
 
-    const allMessages = Array.from(transcripts.values());
-    for (const msg of chatMessages) {
-      const isAgent =
-        msg.from?.identity === agentAudioTrack.participant?.identity;
-      const isSelf =
-        msg.from?.identity === localParticipant.localParticipant.identity;
-      let name = msg.from?.name;
-      if (!name) {
-        if (isAgent) {
-          name = "Agent";
-        } else if (isSelf) {
-          name = "You";
-        } else {
-          name = "Unknown";
-        }
-      }
-      allMessages.push({
-        name,
-        message: msg.message,
-        timestamp: msg.timestamp,
-        isSelf: isSelf,
-      });
-    }
-    allMessages.sort((a, b) => a.timestamp - b.timestamp);
+    localMessages.segments.forEach((s) => {
+      const message = segmentToChatMessage(
+        s,
+        transcripts.get(s.id),  // 使用 get 从 Map 中获取
+        localParticipant.localParticipant
+      );
+      addTranscript(s.id, message);  // 添加到 context 中
+    });
+
+    const allMessages = Array.from(transcripts.values());  // 将 Map 转换为数组
     setMessages(allMessages);
   }, [
-    transcripts,
-    chatMessages,
-    localParticipant.localParticipant,
-    agentAudioTrack.participant,
     agentMessages.segments,
     localMessages.segments,
+    agentAudioTrack.participant,
+    localParticipant.localParticipant,
+    addTranscript,
+    transcripts,
   ]);
 
   return (
