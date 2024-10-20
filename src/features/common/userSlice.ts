@@ -1,3 +1,4 @@
+// src/features/common/userSlice.ts
 import { APIResponse, UserProfile } from '@/helper/types';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';

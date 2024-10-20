@@ -1,3 +1,4 @@
+// protected/welcome/page.tsx
 import IntroPointers from '@/features/login/intro-pointers'
 import Link from 'next/link'
 import React from 'react'

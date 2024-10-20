@@ -82,7 +82,7 @@ return (
                   updateType="emailId"
                   containerStyle="mt-4"
                   labelTitle="Enter your Email Id"
-                  placeholder="Ex - dashwind@gmail.com"
+                  placeholder="Ex - MockView@gmail.com"
                   updateFormValue={updateFormValue}
                 />
               </div>

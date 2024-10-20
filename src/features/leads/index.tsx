@@ -48,7 +48,7 @@ function Leads() {
     return (
         <>
             <TitleCard title="Current Leads" topMargin="mt-2" TopSideButtons={<TopSideButtons />}>
-                <div className="overflow-x-auto w-full">
+                <div className=" w-full">
                     <table className="table w-full">
                         <thead>
                             <tr>

@@ -1,4 +1,4 @@
-// Playground.tsx
+// src/components/playground/Playground.tsx
 "use client";
 import '@livekit/components-styles';
 
@@ -187,7 +187,7 @@ export default function Playground({
 
 
         <div className="flex flex-col w-2/5 h-full"> 
-          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg">
+          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg lg:overflow-y-auto">
             {config.settings.chat && chatTileContent}
           </PlaygroundTile>
         </div>

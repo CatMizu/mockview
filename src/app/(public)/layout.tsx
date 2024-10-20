@@ -26,7 +26,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               <input id="left-sidebar-drawer" type="checkbox" className="drawer-toggle" />
               <div className="drawer-content flex flex-col ">
               
-              <main className="flex-1 overflow-y-auto  " ref={mainContentRef}>
+              <main className="flex-1" ref={mainContentRef}>
                   {children}
               </main>
 

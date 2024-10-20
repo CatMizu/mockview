@@ -62,7 +62,7 @@ function LeftSidebar(props: LeftSidebarProps) {
         window.location.href = '/'
       }
     
-    const getRecordings = async () => {
+    const getProfile = async () => {
         try {
             // 调用 API 获取录制文件，传递用户 email
             const response = await axios.post('/api/get-recordings', {
@@ -77,7 +77,7 @@ function LeftSidebar(props: LeftSidebarProps) {
 
 
     return (
-        <div className="drawer-side z-30 overflow-hidden">
+        <div className="drawer-side z-30">
             <label htmlFor="left-sidebar-drawer" className="drawer-overlay"></label>
             <ul className="menu pt-2 w-80 bg-base-100 min-h-full text-base-content">
                 <button
@@ -92,7 +92,7 @@ function LeftSidebar(props: LeftSidebarProps) {
                         MockView
                     </Link>
                 </li>
-                <div className="overflow-y-scroll pb-20 no-scrollbar" style={{ height: "85vh" }}>
+                <div className="pb-20 no-scrollbar" style={{ height: "85vh" }}>
                     {routes.map((route, k: number) => (
                         <li className="" key={k}>
                             {route.submenu ? (
@@ -125,7 +125,7 @@ function LeftSidebar(props: LeftSidebarProps) {
                 </div>
                 </div>{user.name}<ChevronUpIcon className='w-4 ' /></div>
             <ul tabIndex={0} className="dropdown-content visible w-52 px-4 z-[1]  menu  shadow bg-base-200 rounded-box ">
-                <li onClick={() => getRecordings()}><a className=' ' ><ArrowUpOnSquareIcon className='w-4 ' />Get recordings</a></li>
+                <li onClick={() => getProfile()}><a className=' ' ><ArrowUpOnSquareIcon className='w-4 ' />Profile</a></li>
                 <div className="divider py-2 m-0"></div>
                 <li onClick={() => logoutUser()}><a className=' ' ><ArrowUpOnSquareIcon className='w-4 ' />Logout</a></li>
             </ul>

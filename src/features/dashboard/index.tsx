@@ -91,7 +91,7 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
       const text = formatTranscriptsForGPT(transcripts);
       
       try {
-        const response = await axios.post("/api/analyze-text", { text });
+        const response = await axios.post("/api/conversation-analyze", { text });
         console.log(response.data.message); 
         // upload user results to storage
       } catch (error) {

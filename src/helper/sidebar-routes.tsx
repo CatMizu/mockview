@@ -1,3 +1,4 @@
+// src/helper/sidebar-routes.tsx
 import { JSX } from 'react';
 import  Squares2X2Icon  from '@heroicons/react/24/outline/Squares2X2Icon';
 import InboxArrowDownIcon from '@heroicons/react/24/outline/InboxArrowDownIcon';
@@ -24,6 +25,12 @@ const routes: SidebarMenuObj[] = [
         pageTitle: 'Dashboard',
     },
     {
+        path: '/profile',
+        icon: <UsersIcon className={iconClasses} />, 
+        pageName: 'Profile',
+        pageTitle: 'Profile',
+    },
+    {
         path: '/settings',
         icon: <Cog6ToothIcon className={`${iconClasses} inline`} />,
         pageName: 'Settings',
@@ -42,7 +49,7 @@ const routes: SidebarMenuObj[] = [
                 pageTitle : "Team",
             }
         ],
-    },
+    }
 ];
 
 export default routes;
