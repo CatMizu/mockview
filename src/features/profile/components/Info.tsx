@@ -39,7 +39,7 @@ import {
       icon: <FaMapMarkerAlt />,
       iconColor: "text-[#6AB5B9] ",
       name: "Location",
-      meta: <>Hong Kong, China</>,
+      meta: <>Toronto, Canada</>,
     },
     {
       id: 3,
@@ -63,7 +63,7 @@ import {
       icon: <FaCalendarAlt />,
       iconColor: "text-[#C17CEB]",
       name: "Birthday",
-      meta: <>May 27, 1990</>,
+      meta: <>Dec 06, 1996</>,
     },
   ];
   
@@ -73,7 +73,10 @@ import {
         {personalContent.map((item) => (
           <div className={`flex py-2.5 ${item.border || ""}`} key={item.id}>
             <span
-              className={`flex-shrink-0 socialbtn bg-white dark:bg-black ${item.iconColor} shadow-md`}
+              className={`flex-shrink-0 socialbtn bg-white dark:bg-black ${item.iconColor} shadow-md p-3 w-10 h-10 flex items-center justify-center rounded-lg`}
+
+
+
             >
               {item.icon}
             </span>
