@@ -1,16 +1,10 @@
 // src/helper/portfolioData.ts
 export interface PortfolioData {
     id: number;
-    tag: string;
     title: string;
     img: string;
-    imgSmall: string;
-    bg: string;
-    client: string;
-    langages: string;
-    link: string;
-    linkText: string;
-    description: string;
+    videoLink: string;
+    analyze: string;
   }
   
   // 定义并导出 portfolioData

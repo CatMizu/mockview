@@ -39,6 +39,7 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
     const { shouldConnect, wsUrl, token, roomName, mode, connect, disconnect } = useConnection();
     const user = useAppSelector((state) => state.user);
     const { transcripts } = useTranscription();
+    const timestampRef = React.useRef<string | null>(null);
 
 
     const handleConnect = useCallback(
@@ -54,6 +55,7 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
       try {
         const userEmail = user.emailId
         const timestamp = new Date().toISOString();
+        timestampRef.current = timestamp;
         const response = await axios.post("/api/start-recording", { roomName, userEmail, timestamp });
         egressIdRef.current = response.data.egressId || null;
         console.log(response.data.message);
@@ -89,15 +91,16 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
     const handleDisconnected = useCallback(async () => {
       await stopEgress();      
       const text = formatTranscriptsForGPT(transcripts);
-      
+      const timestamp = timestampRef.current;
+
       try {
-        const response = await axios.post("/api/conversation-analyze", { text });
+        const response = await axios.post("/api/conversation-analyze", { text, timestamp, userEmail: user.emailId });
         console.log(response.data.message); 
         // upload user results to storage
       } catch (error) {
         console.error('Email sending failed:', error);
       }
-    }, [stopEgress, transcripts]);
+    }, [stopEgress, transcripts, user.emailId]);
 
 
 

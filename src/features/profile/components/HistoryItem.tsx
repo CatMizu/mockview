@@ -1,5 +1,6 @@
 //src/features/profile/components/HistoryItem.tsx
 import Image from "next/image";
+import { format } from "date-fns";
 
 interface PortfolioItemProps {
   item: any; 
@@ -8,18 +9,22 @@ interface PortfolioItemProps {
 }
 
 const HistoryItem: React.FC<PortfolioItemProps> = ({ item, onClick, theme }) => {
+  const fileName = item.analysisFileName || "";
+  const timestamp = fileName.split("_")[1]; // 从文件名中解析时间戳(hard coding)
+  const formattedDate = timestamp ? format(new Date(timestamp), "yyyy-MM-dd HH:mm") : ""; // hard coding
+  
   return (
     <div
       className="rounded-lg p-8 dark:border-[2px] border-[#212425] shadow-lg transition-transform duration-200 hover:scale-105 mb-10 max-w-[400px] mx-auto"
       style={{
-        background: `${theme === "dark" ? "transparent" : item?.bg}`,
+        background: "#FFF0F0",
       }}
       onClick={onClick}
     >
       <div className="overflow-hidden rounded-lg">
         <Image
           className="w-full h-auto cursor-pointer transition duration-200 ease-in-out transform hover:scale-110 rounded-lg"
-          src={item.imgSmall}  
+          src={item.img}  
           width={400}  
           height={400}
           priority

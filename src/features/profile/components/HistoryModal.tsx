@@ -1,16 +1,70 @@
 // src/features/profile/components/HistoryModal.tsx
 import { BsXCircle } from "react-icons/bs";
-import Image from "next/image";
 import Modal from "react-modal";
-import { FiUser, FiCode, FiFilePlus, FiExternalLink } from "react-icons/fi";
+import { useEffect, useRef } from "react";
+import Hls from "hls.js";
 
 interface HistoryModalProps {
-  singleData: any;  // 根据你的类型定义调整
+  singleData: {
+    id: number;
+    title: string;
+    img: string;
+    videoLink: string;
+    analyze: string;
+  } | null;  // 更新类型定义
   isOpen: boolean;
   onRequestClose: () => void;
 }
 
 const HistoryModal: React.FC<HistoryModalProps> = ({ singleData, isOpen, onRequestClose }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    console.log("useEffect triggered");
+    console.log("singleData:", singleData);
+    console.log("singleData.videoLink:", singleData?.videoLink);
+
+    if (singleData?.videoLink) {
+      setTimeout(() => {
+        if (videoRef.current) {
+          console.log("videoRef.current:", videoRef.current);
+
+          if (Hls.isSupported()) {
+            const hls = new Hls();
+            console.log("HLS.js is supported, loading source:", singleData.videoLink);
+
+            hls.loadSource(singleData.videoLink);
+            hls.attachMedia(videoRef.current);
+            console.log("Video attached to HLS.js");
+
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              console.log("HLS.js manifest parsed, video should be ready to play.");
+            });
+
+            hls.on(Hls.Events.ERROR, (event, data) => {
+              if (data.fatal) {
+                console.error("Fatal error during HLS playback:", data);
+              } else {
+                console.warn("Non-fatal HLS.js error:", data);
+              }
+            });
+          } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+            console.log("Native HLS support detected (Safari). Setting video source.");
+            videoRef.current.src = singleData.videoLink;
+          } else {
+            console.error("This browser does not support HLS natively or via HLS.js.");
+          }
+        } else {
+          console.warn("No valid videoRef.");
+        }
+      }, 100);  // 延迟100ms，确保 video 元素挂载完成
+    } else {
+      console.warn("No valid video link.");
+    }
+  }, [singleData]);
+
+  if (!singleData) return null; // 如果 singleData 为空，则不渲染 Modal
+
   return (
     <Modal
       ariaHideApp={false}
@@ -27,55 +81,30 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ singleData, isOpen, onReque
         />
         {/* Modal 内容 */}
         <h2 className="text-[#ef4060] dark:hover:text-[#FA5252] text-3xl text-center font-bold">
-          {singleData?.tag} Project
+          {singleData?.title || "No title"}
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 my-6 gap-4">
-          <div className="space-y-2">
-            <p className="dark:text-white flex items-center text-[15px] sm:text-lg">
-              <FiFilePlus className="sm:text-lg hidden sm:block mr-2 md:text-xl" />
-              Project :&nbsp; <span className="font-medium">Website</span>
-            </p>
-            <p className="dark:text-white flex items-center text-[15px] sm:text-lg">
-              <FiCode className="text-lg mr-2 hidden sm:block" />
-              Languages :&nbsp;
-              <span className="font-medium">{singleData?.langages}</span>
-            </p>
-          </div>
 
-          <div className="space-y-2">
-            <p className="dark:text-white flex items-center text-[15px] sm:text-lg">
-              <FiUser className="text-lg mr-2 hidden sm:block" />
-              Client :&nbsp;
-              <span className="font-medium">{singleData?.client}</span>
-            </p>
-            <p className="dark:text-white flex items-center text-[15px] sm:text-lg">
-              <FiExternalLink className="text-lg mr-2 hidden sm:block" />
-              Preview :&nbsp;
-              <span className="font-medium transition-all duration-300 ease-in-out hover:text-[#ef4060]">
-                <a
-                  href={singleData?.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {singleData?.linkText}
-                </a>
-              </span>
-            </p>
-          </div>
+        {/* 视频播放 */}
+        {singleData?.videoLink ? (
+          <video
+            className="w-full md:h-[450px] h-auto object-cover rounded-xl mt-6"
+            controls
+            ref={videoRef}  // 引用 videoRef 以便使用 HLS.js
+          >
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <p className="dark:text-white font-normal text-[15px] sm:text-sm">
+            No video available.
+          </p>
+        )}
+
+        {/* 显示分析结果 */}
+        <div className="space-y-2 mt-4">
+          <p className="dark:text-white font-normal text-[15px] sm:text-sm">
+            {singleData?.analyze || "No analysis available."}
+          </p>
         </div>
-
-        <p className="dark:text-white font-normal text-[15px] sm:text-sm">
-          {singleData?.description}
-        </p>
-
-        <Image
-          className="w-full md:h-[450px] h-auto object-cover rounded-xl mt-6"
-          src={singleData?.img}
-          alt="portfolio image"
-          width={620}
-          height={420}
-          loading="lazy"
-        />
       </div>
     </Modal>
   );
