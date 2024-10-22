@@ -1,7 +1,6 @@
 import { closeModal } from '../features/common/modalSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { MODAL_BODY_TYPES } from '@/helper/app-constants';
-import AddLeadModalBody from '@/features/leads/components/add-lead-modal-body';
 import ConfirmationModalBody from './confirmation-modal-body';
 
 function ModalLayout() {
@@ -25,7 +24,6 @@ function ModalLayout() {
                     {/* Loading modal body according to different modal type */}
                     {
                         {
-                            [MODAL_BODY_TYPES.LEAD_ADD_NEW]: <AddLeadModalBody closeModal={close} extraObject={extraObject} />,
                             [MODAL_BODY_TYPES.CONFIRMATION]: <ConfirmationModalBody extraObject={extraObject} closeModal={close} />,
                             [MODAL_BODY_TYPES.DEFAULT]: <div></div>
                         }[bodyType]

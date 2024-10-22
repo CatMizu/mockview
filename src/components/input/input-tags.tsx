@@ -36,7 +36,7 @@ function InputTags({
         setTags([...tags, ...newTags]);
         setValue('');
     }
-  }, [value]);
+  }, [tags, value]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
@@ -50,7 +50,7 @@ function InputTags({
 
   useEffect(() => {
     updateFormValue(updateKey, tags); // Pass both updateKey and value
-  }, [tags])
+  }, [tags, updateFormValue, updateKey])
 
   const handleTagRemove = (index: number): void => {
     const updatedTags = [...tags];

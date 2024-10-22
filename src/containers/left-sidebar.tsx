@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { setPageTitle } from '@/features/common/headerSlice';
+import Image from 'next/image';
 import { UserProfile } from '@/helper/types';
 import BookmarkSquareIcon from '@heroicons/react/24/outline/BookmarkSquareIcon'
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon'
@@ -31,12 +32,14 @@ function LeftSidebar(props: LeftSidebarProps) {
     const user = useAppSelector((state) => state.user);
 
 
+
     useEffect(() => {
+        if (!pathname) return; // 确保 pathname 不为 null
         console.log(pathname)
         let routeObj = routes.filter((r) => {return r.path == pathname})[0]
         if(routeObj){
             dispatch(setPageTitle({title : routeObj.pageTitle}))
-        }else{
+        } else {
             const secondSlashIndex = pathname.indexOf('/', pathname.indexOf('/') + 1)
             if (secondSlashIndex !== -1) {
                 const substringBeforeSecondSlash = pathname.substring(0, secondSlashIndex);
@@ -45,16 +48,15 @@ function LeftSidebar(props: LeftSidebarProps) {
                     let submenuObj = submenuRouteObj.submenu.filter((r) => {return r.path == pathname})[0]
                     console.log("herere", submenuObj)
                     dispatch(setPageTitle({title : submenuObj.pageTitle}))
-                    
                 }
             }
         }
-    }, [pathname])
+    }, [dispatch, pathname])
 
 
     useEffect(() => {
         dispatch(getUserInfo())
-    }, [])
+    }, [dispatch])
 
     const logoutUser = async () => {
         console.log("here")
@@ -107,7 +109,7 @@ function LeftSidebar(props: LeftSidebarProps) {
             <div tabIndex={0} role="button" className="btn w-full bg-base-100 text-left justify-start ">
                 <div className="avatar">
                 <div className="w-6 rounded-full">
-                    <img src={user.avatar} />
+                    <Image src={user.avatar} alt="User avatar" width={24} height={24} />
                 </div>
                 </div>{user.name}<ChevronUpIcon className='w-4 ' /></div>
             <ul tabIndex={0} className="dropdown-content visible w-52 px-4 z-[1]  menu  shadow bg-base-200 rounded-box ">
