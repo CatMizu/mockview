@@ -4,6 +4,8 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect, useCallback } from 'react'
 import auth from '@/lib/auth'
 import { useRouter } from 'next/navigation'
+import { useAppDispatch } from './hooks'
+import { getUserInfo } from '@/features/common/userSlice'
 
 interface AuthContextType {
   isAuthenticated: boolean
@@ -18,13 +20,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [lastUsedWorkspaceId, setLastUsedWorkspaceId] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const dispatch = useAppDispatch()
   const router = useRouter()
 
   const checkAuth = useCallback(() => {
     const authStatus = auth.isAuthenticated()
     setIsAuthenticated(authStatus)
     setIsLoading(false)
-  }, [])
+    if (authStatus) {
+      dispatch(getUserInfo());
+    }
+  }, [dispatch])
 
   useEffect(() => {
     checkAuth()

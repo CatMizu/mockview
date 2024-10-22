@@ -5,6 +5,7 @@ import Masonry from "react-masonry-css";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import axios from "axios";
+import { useAppSelector } from '@/lib/hooks';
 
 interface PortfolioData {
   id: number;
@@ -29,12 +30,12 @@ const ProjectHistory: React.FC = () => {
 
   const [singleData, setSingleData] = useState<PortfolioData | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState<PortfolioData[]>([]); // 使用新的 data 结构
+  const [data, setData] = useState<PortfolioData[]>([]); 
+  const user = useAppSelector((state) => state.user);
 
-  // 获取 API 数据并生成新的 Data
   const fetchRecordingsAndAnalyses = async () => {
     try {
-      const userEmail = "test@gmail.com"; // Replace with actual user email
+      const userEmail = user.emailId;
   
       // Fetch video recordings
       const recordingsResponse = await axios.post("/api/get-recordings", { userEmail });
@@ -43,20 +44,19 @@ const ProjectHistory: React.FC = () => {
       // Fetch conversation analyses
       const analysesResponse = await axios.post("/api/get-conversation-analyses", { userEmail });
       const analyses: AnalysisContent[] = analysesResponse.data.analysisContents || [];
-  
-      // 生成新的 PortfolioData 数据
+
       const newData: PortfolioData[] = analyses.map((analysis, index) => {
-        // 从 fileName 中解析时间戳
+
         const fileName = analysis.fileName || "";
         const timestamp = fileName.split("_")[1]; // 假设文件名格式为 userEmail_timestamp_analysis.txt
         const formattedDate = timestamp ? format(new Date(timestamp), "yyyy-MM-dd HH:mm:ss") : "No Date";
   
         return {
-          id: index, // 每个项目的 id
-          title: formattedDate, // 使用解析后的时间作为标题
-          img: "https://reqres.in/img/faces/7-image.jpg", // 默认图片路径
-          videoLink: recordings[index] || "", // 从 recordings 中获取视频链接
-          analyze: analysis.content || "No analysis available", // 获取分析内容
+          id: index, 
+          title: formattedDate, 
+          img: "https://reqres.in/img/faces/7-image.jpg",
+          videoLink: recordings[index] || "",
+          analyze: analysis.content || "No analysis available",
         };
       });
   

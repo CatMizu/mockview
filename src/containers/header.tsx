@@ -33,7 +33,7 @@ function Header({contentRef}: HeaderProps): JSX.Element {
       }
       dispatch(removeNotificationMessage());
     }
-  }, [newNotificationMessage]);
+  }, [dispatch, newNotificationMessage, newNotificationStatus]);
 
 //  Scroll back to top on new page load
  useEffect(() => {
@@ -43,7 +43,7 @@ function Header({contentRef}: HeaderProps): JSX.Element {
           behavior: "smooth"
       });
   }
-}, [pageTitle])
+}, [contentRef, pageTitle])
 
   useEffect(() => {
     themeChange(false);
@@ -54,7 +54,7 @@ function Header({contentRef}: HeaderProps): JSX.Element {
         setCurrentTheme("light");
       }
     }
-  }, []);
+  }, [currentTheme]);
 
   // Opening right sidebar for notification
   const openNotification = (): void => {
@@ -73,12 +73,16 @@ function Header({contentRef}: HeaderProps): JSX.Element {
       </div>
 
       <div className="flex-none">
-        {/* Light and dark theme selection toggle */}
+        {/* Light and dark theme selection toggle
+  
         <label className="swap">
           <input type="checkbox" />
           <SunIcon data-set-theme="light" data-act-class="ACTIVECLASS" className={`fill-current w-6 h-6 ${currentTheme === "dark" ? "swap-on" : "swap-off"}`} />
           <MoonIcon data-set-theme="dark" data-act-class="ACTIVECLASS" className={`fill-current w-6 h-6 ${currentTheme === "light" ? "swap-on" : "swap-off"}`} />
         </label>
+        
+        */}
+        
 
         {/* Notification icon */}
         <button className="btn btn-ghost mr-4 ml-2 btn-circle" onClick={openNotification}>

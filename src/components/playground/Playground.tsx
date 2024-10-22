@@ -70,13 +70,13 @@ export default function Playground({
 
   const audioTileContent = useMemo(() => {
     const disconnectedContent = (
-      <div className="flex flex-col items-center justify-center gap-2 text-gray-700 text-center w-full">
+      <div className="flex flex-col items-center justify-center gap-2 text-gray-700 text-center w-full h-full">
         No audio track. Connect to get started.
       </div>
     );
   
     const waitingContent = (
-      <div className="flex flex-col items-center gap-2 text-gray-700 text-center w-full">
+      <div className="flex flex-col items-center justify-center gap-2 text-gray-700 text-center w-full h-full">
         <LoadingSVG />
         Waiting for audio track
       </div>
@@ -92,9 +92,9 @@ export default function Playground({
   
     return (
       <div
-        className="flex items-center justify-center w-full h-48"
-        style={{ backgroundColor: "inherit" }}
-      >
+      className="flex items-center justify-center w-full h-full"
+      style={{ backgroundColor: "inherit" }}
+    >
         <BarVisualizer
           state={voiceAssistant.state}
           trackRef={voiceAssistant.audioTrack}
@@ -173,8 +173,8 @@ export default function Playground({
 
 
 
-        <div className="flex flex-col w-3/5 h-full space-y-9"> 
-          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg" backgroundColor = "#000000">
+        <div className="flex flex-col w-3/5 h-full space-y-6"> 
+          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg" backgroundColor = "#343a40">
             {settingsTileContent}
           </PlaygroundTile>
 
@@ -186,11 +186,20 @@ export default function Playground({
 
 
 
-        <div className="flex flex-col w-2/5 h-full"> 
-          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg lg:overflow-y-auto">
+        <div className="flex flex-col w-2/5 h-full space-y-6">
+          {/* Instruction Area - 调整背景色 */}
+          <div className="flex-none" style={{ flexBasis: '33.33%' }}>
+            <div className="border p-4 rounded-lg shadow-lg bg-gray-200 h-full">
+              <p className="text-gray-800 text-center">This is the instruction area. Follow the instructions here.</p>
+            </div>
+          </div>
+
+          {/* Chat Tile Area */}
+          <PlaygroundTile className="flex-grow border p-4 rounded-lg shadow-lg lg:overflow-y-auto bg-gray-100">
             {config.settings.chat && chatTileContent}
           </PlaygroundTile>
         </div>
+
         
       </div>
 
