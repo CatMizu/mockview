@@ -12,7 +12,7 @@ const LeadFeedback: React.FC = () => {
 
       {/* Feedback */}
       <h3 className="text-1xl font-semibold text-gray-900 dark:text-white mb-4">
-        "It was a pleasure working with John, I would recommend ..."
+        &quot;It was a pleasure working with John, I would recommend ...&quot;
       </h3>
 
       {/* Lead Info */}

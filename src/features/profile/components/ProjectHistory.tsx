@@ -2,7 +2,7 @@
 import HistoryItem from "./HistoryItem";
 import HistoryModal from "./HistoryModal";
 import Masonry from "react-masonry-css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { format } from "date-fns";
 import axios from "axios";
 import { useAppSelector } from '@/lib/hooks';
@@ -33,7 +33,7 @@ const ProjectHistory: React.FC = () => {
   const [data, setData] = useState<PortfolioData[]>([]); 
   const user = useAppSelector((state) => state.user);
 
-  const fetchRecordingsAndAnalyses = async () => {
+  const fetchRecordingsAndAnalyses = useCallback(async () => {
     try {
       const userEmail = user.emailId;
   
@@ -50,7 +50,6 @@ const ProjectHistory: React.FC = () => {
         const timestamp = fileName.split("_")[1]; // 假设文件名格式为 userEmail_timestamp_analysis.txt
         const formattedDate = timestamp ? format(new Date(timestamp), "yyyy MMM dd HH:mm") : "No Date";
       
-        // 给每个图片URL加上随机查询参数，确保不同图片
         const randomImgUrl = `https://picsum.photos/200?random=${Math.floor(Math.random() * 1000)}`;
       
         return {
@@ -66,11 +65,11 @@ const ProjectHistory: React.FC = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [user.emailId]); // 把 user.emailId 作为依赖
 
   useEffect(() => {
-    fetchRecordingsAndAnalyses();
-  }, []);
+    fetchRecordingsAndAnalyses(); // useEffect 内调用这个 useCallback 包裹的函数
+  }, [fetchRecordingsAndAnalyses]);
 
   const handlePortfolioData = (id: number) => {
     const find = data.find((item) => item.id === id);

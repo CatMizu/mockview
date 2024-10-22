@@ -1,5 +1,6 @@
 "use client"
 import {APP_NAME} from '../../helper/app-constants'
+import Image from 'next/image'
 
 function LandingIntro(){
 
@@ -10,10 +11,14 @@ function LandingIntro(){
 
               <h1 className='text-3xl text-center font-bold '>{APP_NAME}</h1>
 
-                <div className="text-center mt-12"><img src="./intro.png" alt="Dashwind Admin Template" className="w-48 inline-block"></img></div>
-              
-
-                
+                <div className="text-center mt-12">
+                <Image 
+                    src="/intro.png" 
+                    alt="Dashwind Admin Template" 
+                    width={192} 
+                    height={192} 
+                    className="w-48 inline-block" 
+                  />
               </div>
 
             </div>
