@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import AWS from 'aws-sdk';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // 从环境变量中读取 API Key
+  apiKey: process.env.OPENAI_API_KEY, 
 });
 
 const S3_ACCESS_KEY = process.env.S3_ACCESS_KEY;
@@ -22,6 +22,12 @@ const s3 = new AWS.S3({
   secretAccessKey: S3_SECRET_KEY,
   region: S3_REGION,
 });
+
+const prompt = `
+Provide feedback for the learner based on the conversation transcript, considering the following grading criteria.
+
+If the learner’s performance was excellent, simply acknowledge their strengths without unnecessary feedback. For areas that need improvement, offer constructive suggestions on how they can improve, and propose specific next steps or actions for further development. Be mindful of their past feedback and improvements to tailor the suggestions appropriately.
+`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {

@@ -1,3 +1,4 @@
+//src/app/(public)/login/page.tsx
 "use client"
 
 import LandingIntro from '@/features/login/landing-intro';
@@ -27,7 +28,7 @@ function Login(): JSX.Element {
 
   const [loginObj, setLoginObj] = useState<LoginObj>({
     otp: '',
-    emailId: '',
+    emailId: 'demo@gmail.com',
   });
   
 

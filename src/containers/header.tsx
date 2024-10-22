@@ -84,15 +84,18 @@ function Header({contentRef}: HeaderProps): JSX.Element {
         */}
         
 
-        {/* Notification icon */}
+        {/* Notification 
         <button className="btn btn-ghost mr-4 ml-2 btn-circle" onClick={openNotification}>
-          <div className="indicator">
+
             <BellIcon className="h-6 w-6" />
             {noOfNotifications > 0 ? (
               <span className="indicator-item badge badge-secondary badge-sm">{noOfNotifications}</span>
             ) : null}
-          </div>
+
         </button>
+        
+        */}
+        
       </div>
     </div>
   );
