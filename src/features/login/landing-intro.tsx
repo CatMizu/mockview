@@ -15,10 +15,14 @@ function LandingIntro(){
                 <Image 
                     src="/intro.png" 
                     alt="Dashwind Admin Template" 
-                    width={192} 
-                    height={192} 
+                    width={192} // 设置图片的宽度
+                    height={192} // 设置图片的高度
                     className="w-48 inline-block" 
                   />
+                </div>
+              
+
+                
               </div>
 
             </div>
