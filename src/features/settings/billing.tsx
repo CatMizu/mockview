@@ -1,5 +1,4 @@
 "use client"
-import TitleCard from "@/components/cards/title-card";
 import DummyData from "@/helper/dummy-data";
 import  { Bill } from "@/helper/dummy-data";
 import React, { useState } from "react";
@@ -16,9 +15,6 @@ const Billing: React.FC = () => {
 
     return (
         <>
-            <TitleCard title="Billing History" topMargin="mt-2">
-                
-            </TitleCard>
         </>
     )
 }
