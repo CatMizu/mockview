@@ -48,7 +48,7 @@ const ProjectHistory: React.FC = () => {
       const newData: PortfolioData[] = analyses.map((analysis, index) => {
         const fileName = analysis.fileName || "";
         const timestamp = fileName.split("_")[1]; // 假设文件名格式为 userEmail_timestamp_analysis.txt
-        const formattedDate = timestamp ? format(new Date(timestamp), "yyyy-MM-dd HH:mm:ss") : "No Date";
+        const formattedDate = timestamp ? format(new Date(timestamp), "yyyy MMM dd HH:mm") : "No Date";
       
         // 给每个图片URL加上随机查询参数，确保不同图片
         const randomImgUrl = `https://picsum.photos/200?random=${Math.floor(Math.random() * 1000)}`;
