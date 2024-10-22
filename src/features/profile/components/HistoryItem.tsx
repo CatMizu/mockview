@@ -9,10 +9,7 @@ interface PortfolioItemProps {
 }
 
 const HistoryItem: React.FC<PortfolioItemProps> = ({ item, onClick, theme }) => {
-  const fileName = item.analysisFileName || "";
-  const timestamp = fileName.split("_")[1]; // 从文件名中解析时间戳(hard coding)
-  const formattedDate = timestamp ? format(new Date(timestamp), "yyyy-MM-dd HH:mm") : ""; // hard coding
-  
+
   return (
     <div
       className="rounded-lg p-8 dark:border-[2px] border-[#212425] shadow-lg transition-transform duration-200 hover:scale-105 mb-10 max-w-[400px] mx-auto"

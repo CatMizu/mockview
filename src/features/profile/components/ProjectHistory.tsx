@@ -46,15 +46,17 @@ const ProjectHistory: React.FC = () => {
       const analyses: AnalysisContent[] = analysesResponse.data.analysisContents || [];
 
       const newData: PortfolioData[] = analyses.map((analysis, index) => {
-
         const fileName = analysis.fileName || "";
         const timestamp = fileName.split("_")[1]; // 假设文件名格式为 userEmail_timestamp_analysis.txt
         const formattedDate = timestamp ? format(new Date(timestamp), "yyyy-MM-dd HH:mm:ss") : "No Date";
-  
+      
+        // 给每个图片URL加上随机查询参数，确保不同图片
+        const randomImgUrl = `https://picsum.photos/200?random=${Math.floor(Math.random() * 1000)}`;
+      
         return {
           id: index, 
           title: formattedDate, 
-          img: "https://reqres.in/img/faces/7-image.jpg",
+          img: randomImgUrl, // 使用带有随机参数的图片链接
           videoLink: recordings[index] || "",
           analyze: analysis.content || "No analysis available",
         };
@@ -77,12 +79,13 @@ const ProjectHistory: React.FC = () => {
   };
 
   return (
-    <div className="lg:rounded-2xl bg-white dark:bg-[#111111] shadow-lg p-6 space-y-8">
+    <div className="lg:rounded-2xl bg-white dark:bg-[#111111] shadow-lg p-6 space-y-8 min-h-[2000px]">
+
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className="flex -ml-4"   
         columnClassName="pl-4"  
-    >
+      >
         {data.map((item) => (
           <HistoryItem
             key={item.id}
@@ -91,22 +94,7 @@ const ProjectHistory: React.FC = () => {
             theme={theme}
           />
         ))}
-        {data.map((item) => (
-          <HistoryItem
-            key={item.id}
-            item={item}
-            onClick={() => handlePortfolioData(item.id)}
-            theme={theme}
-          />
-        ))}
-        {data.map((item) => (
-          <HistoryItem
-            key={item.id}
-            item={item}
-            onClick={() => handlePortfolioData(item.id)}
-            theme={theme}
-          />
-        ))}
+
       </Masonry>
       <HistoryModal
         singleData={singleData}

@@ -1,7 +1,7 @@
 // src/components/playground/Playground.tsx
 "use client";
 import '@livekit/components-styles';
-
+import { FaChevronUp, FaChevronDown } from "react-icons/fa"; 
 import { LoadingSVG } from "@/components/button/LoadingSVG";
 import { ChatMessageType } from "@/components/chat/ChatTile";
 import { AudioInputTile } from "@/components/config/AudioInputTile";
@@ -46,6 +46,11 @@ export default function Playground({
 
   const roomState = useConnectionState();
   const tracks = useTracks();
+  const [isInstructionVisible, setIsInstructionVisible] = useState(true);
+
+  const toggleInstructionVisibility = () => {
+    setIsInstructionVisible((prev) => !prev);
+  };
 
   useEffect(() => {
     if (roomState === ConnectionState.Connected) {
@@ -187,19 +192,40 @@ export default function Playground({
 
 
         <div className="flex flex-col w-2/5 h-full space-y-6">
-          {/* Instruction Area - 调整背景色 */}
-          <div className="flex-none" style={{ flexBasis: '33.33%' }}>
-            <div className="border p-4 rounded-lg shadow-lg bg-gray-200 h-full">
-              <p className="text-gray-800 text-center">This is the instruction area. Follow the instructions here.</p>
-            </div>
+        {/* Instruction Area - 可折叠 */}
+        <div className={`flex-none transition-all duration-300 ${isInstructionVisible ? 'h-auto' : 'h-12'}`}>
+          <div className="border p-5 rounded-lg shadow-lg bg-gray-100 h-full relative">
+            <button 
+              onClick={toggleInstructionVisibility} 
+              className="absolute right-4 top-4 text-sm text-gray-500 hover:text-gray-800"
+            >
+              {isInstructionVisible ? 'Hide' : 'Show'} Instructions
+            </button>
+            {isInstructionVisible && (
+              <>
+                <h2 className="text-lg font-bold text-gray-800 mb-4">Project Intake Meeting</h2>
+                <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                  In this session, you will be leading a project intake meeting with an AI-simulated client from JRVS, a recruitment and consulting company. The goal of this meeting is to gather key details for building a GenAI-powered talent matching system.
+                </p>
+                <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                  You&apos;ll need to ask strategic questions to understand the project timeline, data sources, current workflows, and business metrics such as matching accuracy and response rates. Identifying the specific challenges JRVS faces is crucial.
+                </p>
+                <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                  This conversation will help you practice leading a consulting meeting aimed at defining project goals and finding tailored solutions.
+                </p>
+                <p className="text-sm text-gray-700 leading-relaxed mb-4 font-semibold">
+                  Press the Green Button to start. The practice history will be saved automatically once the conversation ends.
+                </p>
+              </>
+            )}
           </div>
+        </div>
 
           {/* Chat Tile Area */}
           <PlaygroundTile className="flex-grow border p-4 rounded-lg shadow-lg lg:overflow-y-auto bg-gray-100">
             {config.settings.chat && chatTileContent}
           </PlaygroundTile>
         </div>
-
         
       </div>
 
