@@ -61,32 +61,6 @@ function LeftSidebar(props: LeftSidebarProps) {
         await auth.logout()
         window.location.href = '/'
       }
-    
-    const getRecordings = async () => {
-        try {
-            // 调用 API 获取录制文件，传递用户 email
-            const response = await axios.post('/api/get-recordings', {
-                userEmail: user.emailId,  // 使用用户的 email
-            });
-            console.log('Recordings:', response.data.videoUrls);  // 打印获取到的录制文件 URL
-        } catch (error) {
-            console.error('Error fetching recordings:', error);
-        }
-    }
-
-    const getAnalyses = async () => {
-        try {
-            // 调用 API 获取录制文件，传递用户 email
-            const response = await axios.post('/api/get-conversation-analyses', {
-                userEmail: user.emailId,  // 使用用户的 email
-            });
-            console.log('Recordings:', response.data.analysisContents);  // 打印获取到的录制文件 URL
-        } catch (error) {
-            console.error('Error fetching recordings:', error);
-        }
-    }
-      
-
 
     return (
         <div className="drawer-side z-30">
@@ -137,9 +111,6 @@ function LeftSidebar(props: LeftSidebarProps) {
                 </div>
                 </div>{user.name}<ChevronUpIcon className='w-4 ' /></div>
             <ul tabIndex={0} className="dropdown-content visible w-52 px-4 z-[1]  menu  shadow bg-base-200 rounded-box ">
-                <li onClick={() => getAnalyses()}><a className=' ' ><ArrowUpOnSquareIcon className='w-4 ' />Test Get Analyses</a></li>
-                <div className="divider py-2 m-0"></div>
-                <li onClick={() => getRecordings()}><a className=' ' ><ArrowUpOnSquareIcon className='w-4 ' />Test Get Recordings</a></li>
                 <div className="divider py-2 m-0"></div>
                 <li onClick={() => logoutUser()}><a className=' ' ><ArrowUpOnSquareIcon className='w-4 ' />Logout</a></li>
             </ul>
