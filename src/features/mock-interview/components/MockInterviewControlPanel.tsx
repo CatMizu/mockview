@@ -13,6 +13,8 @@ export const MockInterviewControlPanel: React.FC<MockInterviewControlPanelProps>
   const [isFormVisible, setIsFormVisible] = useState(true);
   const [position, setPosition] = useState('');
   const [companyName, setCompanyName] = useState('');
+  const [companyLocation, setCompanyLocation] = useState('');
+  const [positionRequirement, setPositionRequirement] = useState(''); 
   const [interviewType, setInterviewType] = useState('Technical Interview');
   const [additionalInfo, setAdditionalInfo] = useState('');
   const [tier, setTier] = useState<'free' | 'subscribed'>('free');
@@ -21,8 +23,15 @@ export const MockInterviewControlPanel: React.FC<MockInterviewControlPanelProps>
 
 
   useEffect(() => {
-    setIsFormComplete(position !== '' && companyName !== '' && interviewType !== '' && additionalInfo !== '');
-  }, [position, companyName, interviewType, additionalInfo]);
+    setIsFormComplete(
+      position !== '' &&
+      companyName !== '' &&
+      companyLocation !== '' &&  
+      positionRequirement !== '' && 
+      interviewType !== '' &&
+      additionalInfo !== ''
+    );
+  }, [position, companyName, companyLocation, positionRequirement, interviewType, additionalInfo]);
 
   useEffect(() => {
     if (roomState === ConnectionState.Connected && localParticipant && isFormComplete) {
@@ -31,6 +40,8 @@ export const MockInterviewControlPanel: React.FC<MockInterviewControlPanelProps>
           tier,
           scenario: "mock interview",
           position,
+          companyLocation,
+          positionRequirement,
           companyName,
           interviewType,
           additionalInfo,
@@ -39,7 +50,7 @@ export const MockInterviewControlPanel: React.FC<MockInterviewControlPanelProps>
         console.error('Failed to update participant attributes:', error);
       }
     }
-  }, [roomState, localParticipant, position, companyName, interviewType, additionalInfo, isFormComplete, tier]);
+  }, [roomState, localParticipant, position, companyName, interviewType, additionalInfo, isFormComplete, tier, companyLocation, positionRequirement]);
 
 
   const toggleFormVisibility = () => {
@@ -86,6 +97,27 @@ export const MockInterviewControlPanel: React.FC<MockInterviewControlPanelProps>
                 />
               </div>
               <div>
+                <label className="block text-sm text-gray-700">Company Location</label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={companyLocation}
+                  onChange={(e) => setCompanyLocation(e.target.value)}
+                  placeholder="Enter the company location"
+                  disabled={roomState === ConnectionState.Connected}
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-700">Position Requirement</label>
+                <textarea
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={positionRequirement}
+                  onChange={(e) => setPositionRequirement(e.target.value)}
+                  placeholder="Describe the position requirements"
+                  disabled={roomState === ConnectionState.Connected}
+                />
+              </div>
+              <div>
                 <label className="block text-sm text-gray-700">Interview Type</label>
                 <select
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -119,18 +151,16 @@ export const MockInterviewControlPanel: React.FC<MockInterviewControlPanelProps>
                 }}
                 className={`p-2 rounded-lg shadow-lg ${isFormComplete ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'}`} 
                 connectionState={roomState}
-              >
-
-              </Button>
+              />
               
               <div className="flex items-center">
-              <input 
-                type="checkbox" 
-                className={`toggle ${tier === 'subscribed' ? 'bg-[#4299E1] border-[#4299E1]' : 'bg-gray-300 border-gray-300'}`}  // Conditional toggle color
-                checked={tier === 'subscribed'} 
-                onChange={handleTierToggle}
-                disabled={roomState === ConnectionState.Connected}
-              />
+                <input 
+                  type="checkbox" 
+                  className={`toggle ${tier === 'subscribed' ? 'bg-[#4299E1] border-[#4299E1]' : 'bg-gray-300 border-gray-300'}`}  // Conditional toggle color
+                  checked={tier === 'subscribed'} 
+                  onChange={handleTierToggle}
+                  disabled={roomState === ConnectionState.Connected}
+                />
                 <span className="ml-3 text-sm w-24">{tier === 'subscribed' ? 'Subscribed' : 'Free'}</span>
               </div>
             </div>

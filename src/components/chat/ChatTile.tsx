@@ -67,7 +67,6 @@ export const ChatTile = ({ messages, accentColor, onSend }: ChatTileProps) => {
           })}
         </div>
       </div>
-      <ChatMessageInput accentColor={accentColor} onSend={onSend} />
     </div>
   );
 };
