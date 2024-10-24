@@ -152,7 +152,7 @@ export default function Playground({  onConnect, scenarioContent}: PlaygroundPro
         </PlaygroundTile>
       </div>
       <div className="flex flex-col w-full h-full space-y-6 lg:w-3/5 flex-shrink-0 overflow-y-auto"> 
-        <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg min-h-[300px] lg:min-h-[400px] bg-gray-800 overflow-y-auto">
+        <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg min-h-[300px] lg:min-h-[400px] bg-gray-800 overflow-y-auto" backgroundColor = "#4a4e69">
           {settingsTileContent}
         </PlaygroundTile>
         <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg min-h-[300px] lg:min-h-[400px] overflow-y-auto">
