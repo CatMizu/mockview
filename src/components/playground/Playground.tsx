@@ -117,14 +117,17 @@ export default function Playground({  onConnect, scenarioContent}: PlaygroundPro
   const chatTileContent = useMemo(() => {
     if (voiceAssistant.audioTrack) {
       return (
-        <TranscriptionTile
-          agentAudioTrack={voiceAssistant.audioTrack}
-          accentColor={config.settings.theme_color}
-        />
+
+          <TranscriptionTile
+            agentAudioTrack={voiceAssistant.audioTrack}
+            accentColor={config.settings.theme_color}
+          />
+
       );
     }
     return <></>;
   }, [config.settings.theme_color, voiceAssistant.audioTrack]);
+  
 
   const settingsTileContent = useMemo(() => {
     return (
@@ -144,21 +147,23 @@ export default function Playground({  onConnect, scenarioContent}: PlaygroundPro
   
 
   return (
-    <div className="flex flex-col h-screen w-full space-y-6 lg:flex-row lg:space-y-0 lg:space-x-9 p-4"> 
-      <div className="flex flex-col w-full h-full space-y-6 lg:w-2/5 flex-shrink-0 overflow-y-auto"> 
-        {scenarioContent}          
-        <PlaygroundTile className="flex-grow border p-4 rounded-lg shadow-lg bg-gray-100 min-h-[350px] lg:min-h-[450px] overflow-y-auto">
+    <div className="flex flex-col w-full space-y-6 lg:flex-row lg:space-y-0 lg:space-x-9 p-4">
+      <div className="flex flex-col w-full min-h-0 space-y-6 lg:w-2/5 flex-shrink-0 overflow-hidden">
+        {scenarioContent}
+        <PlaygroundTile className="flex-grow border p-4 rounded-lg shadow-lg bg-gray-100 min-h-[200px] md:min-h-[350px] lg:min-h-[450px] max-h-[500px] overflow-y-auto">
           {config.settings.chat && chatTileContent}
         </PlaygroundTile>
       </div>
-      <div className="flex flex-col w-full h-full space-y-6 lg:w-3/5 flex-shrink-0 overflow-y-auto"> 
-        <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg min-h-[300px] lg:min-h-[400px] bg-gray-800 overflow-y-auto" backgroundColor = "#4a4e69">
-          {settingsTileContent}
-        </PlaygroundTile>
-        <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg min-h-[300px] lg:min-h-[400px] overflow-y-auto">
-          {config.settings.outputs.audio && audioTileContent}
-        </PlaygroundTile>
-      </div>
+
+      <div className="flex flex-col w-full min-h-0 space-y-6 lg:w-3/5 flex-shrink-0 overflow-hidden">
+      <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg min-h-[200px] md:min-h-[300px] lg:min-h-[400px] bg-gray-800" backgroundColor="#4a4e69">
+        {settingsTileContent}
+      </PlaygroundTile>
+      <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg min-h-[200px] md:min-h-[300px] lg:min-h-[400px]">
+        {config.settings.outputs.audio && audioTileContent}
+      </PlaygroundTile>
+    </div>
+
     </div>
   );
   

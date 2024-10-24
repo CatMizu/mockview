@@ -48,9 +48,8 @@ export default function ProtectedLayout({ children, params }: LayoutProps) {
             <input id="left-sidebar-drawer" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content flex flex-col h-screen">
             <Header contentRef={mainContentRef}/>
-            <main className="flex-1 md:pt-4 pt-4 px-6  bg-base-200 overflow-y-scroll" ref={mainContentRef}>
+            <main className="flex-1 md:pt-4 pt-4 px-6 min-h-screen bg-base-200 overflow-y-scroll" ref={mainContentRef}>
                 {children}
-                <div className="h-16"></div>
             </main>
         </div> 
             <LeftSidebar />

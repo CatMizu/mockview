@@ -43,10 +43,10 @@ export const ChatTile = ({ messages, accentColor, onSend }: ChatTileProps) => {
     <div className="flex flex-col gap-4 w-full h-full overflow-y-auto">
       <div
         ref={containerRef}
-        onScroll={handleScroll} // 监听用户滚动事件
+        onScroll={handleScroll}
         className="overflow-y-auto"
         style={{
-          height: `calc(100% - ${inputHeight}px)`,
+          height: `calc(100% - ${inputHeight}px)`, // 动态计算高度，确保输入框和消息共用空间
         }}
       >
         <div className="flex flex-col min-h-full justify-end">
@@ -67,6 +67,7 @@ export const ChatTile = ({ messages, accentColor, onSend }: ChatTileProps) => {
           })}
         </div>
       </div>
+      <ChatMessageInput accentColor={accentColor} onSend={onSend} />
     </div>
   );
 };
