@@ -134,16 +134,9 @@ export default function Playground({  onConnect, scenarioContent}: PlaygroundPro
             <VideoTrack trackRef={localVideoTrack} className="object-cover w-full h-full rounded-lg" />
           </div>
         )}
-  
         <div className="absolute bottom-4 left-0 w-full h-auto z-10 flex justify-center items-center space-x-8 p-4">
-          {localVideoTrack && (
-            <ConfigurationPanelItem deviceSelectorKind="videoinput" />
-          )}
-  
-  
-          {localVideoTrack && (
-            <ConfigurationPanelItem deviceSelectorKind="audioinput" />
-          )}
+          {localVideoTrack && <ConfigurationPanelItem deviceSelectorKind="videoinput" />}
+          {localVideoTrack && <ConfigurationPanelItem deviceSelectorKind="audioinput" />}
         </div>
       </>
     );
@@ -152,34 +145,23 @@ export default function Playground({  onConnect, scenarioContent}: PlaygroundPro
 
   return (
     <>
-      <div className="flex h-full w-full space-x-9 p-4"> 
-
-
-
-        <div className="flex flex-col w-3/5 h-full space-y-6"> 
-          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg" backgroundColor = "#343a40">
-            {settingsTileContent}
-          </PlaygroundTile>
-
-          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg">
-            {config.settings.outputs.audio && audioTileContent}
-          </PlaygroundTile>
-        </div>
-
-
-
-
-        <div className="flex flex-col w-2/5 h-full space-y-6">
-
+      <div className="flex flex-col h-full w-full space-y-6 lg:flex-row lg:space-y-0 lg:space-x-9 p-4"> 
+        <div className="flex flex-col w-full h-full space-y-6 lg:w-2/5"> 
           {scenarioContent}          
-          {/* Chat Tile Area */}
           <PlaygroundTile className="flex-grow border p-4 rounded-lg shadow-lg lg:overflow-y-auto bg-gray-100">
             {config.settings.chat && chatTileContent}
           </PlaygroundTile>
         </div>
-        
+        <div className="flex flex-col w-full h-full space-y-6 lg:w-3/5"> 
+          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg" backgroundColor="#343a40">
+            {settingsTileContent}
+          </PlaygroundTile>
+          <PlaygroundTile className="flex-1 border p-4 rounded-lg shadow-lg">
+            {config.settings.outputs.audio && audioTileContent}
+          </PlaygroundTile>
+        </div>
       </div>
-
     </>
-  );
+);
+
 }
