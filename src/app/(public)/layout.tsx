@@ -13,10 +13,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
 
 
-  // If user is authenticated and still opening login pages, redirect to welcome page
+  // If user is authenticated and still opening login pages, redirect to main menu page
   useEffect(() => {
     if (!isLoading && isAuthenticated && pathname === '/login') {
-        router.replace(`/welcome`)
+        router.replace(`/main-menu`)
     }
   console.log("public layout...", isAuthenticated, isLoading)
   }, [isAuthenticated, isLoading, router, pathname])

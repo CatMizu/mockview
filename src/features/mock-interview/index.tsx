@@ -1,4 +1,4 @@
-//index.tsx
+//src/features/mock-interview/index.tsx
 "use client";
 import React from 'react';
 import axios from "axios";
@@ -7,19 +7,21 @@ import {
     LiveKitRoom,
     RoomAudioRenderer,
     StartAudio,
+    useLocalParticipant,
   } from "@livekit/components-react";
 import { useCallback } from "react";
 
-import Playground from "@/components/playground/Playground";
+import Playground from '../../components/Playground/Playground';
 import { ConfigProvider } from "@/hooks/useConfig";
 import { ConnectionMode, ConnectionProvider, useConnection } from "@/hooks/useConnection";
 import { ToastProvider } from "@/components/toast/ToasterProvider";
 import { TranscriptionProvider } from "@/hooks/useTranscription";
 import { useTranscription } from '@/hooks/useTranscription';
 import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
+import { MockInterviewControlPanel } from '@/features/mock-interview/components/MockInterviewControlPanel';
 
   
-  export default function Dashboard() {
+  export default function MockInterview() {
     return (
       <ToastProvider>
         <ConfigProvider>
@@ -40,7 +42,7 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
     const user = useAppSelector((state) => state.user);
     const { transcripts } = useTranscription();
     const timestampRef = React.useRef<string | null>(null);
-
+    const egressIdRef = React.useRef<string | null>(null);
 
     const handleConnect = useCallback(
       async (c: boolean, mode: ConnectionMode) => {
@@ -48,8 +50,6 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
       },
       [connect, disconnect]
     );
-
-    const egressIdRef = React.useRef<string | null>(null);
 
     const startEgress = useCallback(async () => {
       try {
@@ -81,9 +81,10 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
 
 
     // happens when use connected
-    const handleConnected = useCallback(async () => {
+    const handleConnected = useCallback(async () => {  
       await startEgress();
-    }, [startEgress]);
+
+  }, [startEgress]);
 
 
 
@@ -104,11 +105,6 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
 
 
 
-
-
-
-
-
     return (
       <>
         <LiveKitRoom
@@ -125,6 +121,10 @@ import { formatTranscriptsForGPT } from '@/helper/formatTranscripts';
               const m = process.env.NEXT_PUBLIC_LIVEKIT_URL ? "env" : mode;
               handleConnect(c, m);
             }}
+            scenarioContent={<MockInterviewControlPanel onConnect={(c: boolean) => {
+              const m = process.env.NEXT_PUBLIC_LIVEKIT_URL ? "env" : mode;
+              handleConnect(c, m);
+            }}/>}
           />
           <RoomAudioRenderer />
           <StartAudio label="Click to enable audio playback" />

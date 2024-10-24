@@ -1,9 +1,9 @@
-// protected/welcome/page.tsx
+// protected/mainMenu/page.tsx
 import IntroPointers from '@/features/login/intro-pointers'
 import Link from 'next/link'
 import React from 'react'
 
-function Welcome() {
+function MainMenu() {
   return (
     <div className="hero h-4/5 bg-base-200">
     <div className="hero-content">
@@ -16,4 +16,4 @@ function Welcome() {
   )
 }
 
-export default Welcome
+export default MainMenu

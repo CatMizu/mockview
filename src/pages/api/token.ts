@@ -34,6 +34,7 @@ export default async function handleToken(
       canPublish: true,
       canPublishData: true,
       canSubscribe: true,
+      canUpdateOwnMetadata: true, 
     };
 
     const token = await createToken({ identity }, grant);

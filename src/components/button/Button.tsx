@@ -17,20 +17,30 @@ export const Button: React.FC<ButtonProps> = ({
   ...allProps
 }) => {
   const buttonStyle = {
-    backgroundColor:
-      connectionState === ConnectionState.Connected ? "red" : "green",
-    color: "white",
-    width: "80px",
-    height: "80px",
-    borderRadius: "50%",
+    backgroundColor: disabled
+      ? "#A0AEC0" 
+      : connectionState === ConnectionState.Connected
+      ? "#E53E3E" 
+      : "#4299E1",
+    color: disabled ? "#CBD5E0" : "white", 
+    width: "100px", 
+    height: "40px", 
+    borderRadius: "8px", 
+    boxShadow: disabled ? "none" : "0 4px 6px rgba(0, 0, 0, 0.1)", 
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: disabled ? "not-allowed" : "pointer", 
+    pointerEvents: disabled ? 'none' : 'auto' as React.CSSProperties['pointerEvents'], // 修复类型
+    opacity: disabled ? 0.6 : 1, 
+    transition: "all 0.3s ease",
   };
 
   return (
     <button
-      className={`flex items-center justify-center text-sm transition ease-out duration-250 ${
-        disabled ? "pointer-events-none" : ""
-      } active:scale-[0.98] ${className}`}
+      className={`flex items-center justify-center text-sm active:scale-[0.98] ${className}`}
       style={buttonStyle} 
+      disabled={disabled} // 将 disabled 传入按钮属性
       {...allProps}
     >
       {connectionState === ConnectionState.Connecting ? (
@@ -40,6 +50,7 @@ export const Button: React.FC<ButtonProps> = ({
       ) : (
         <FiPhone size={24} />
       )}
+      {children}
     </button>
   );
 };

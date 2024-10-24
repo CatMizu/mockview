@@ -76,7 +76,7 @@ function LeftSidebar(props: LeftSidebarProps) {
                 </button>
 
                 <li className="mb-2 font-semibold text-xl">
-                    <Link href="/welcome">
+                    <Link href="/main-menu">
                         MockView
                     </Link>
                 </li>
